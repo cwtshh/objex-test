@@ -9,6 +9,22 @@ const generate_token = (id) => {
     });
 }
 
+const get_by_id = async(req, res) => {
+    const student = await Student.findById(req.params.id).select('-password');
+    if(!student) {
+        return res.status(400).json({ message: 'Failed to get student' });
+    }
+    res.status(200).json(student);
+}
+
+const get_all_students = async(req, res) => {
+    const students = await Student.find().select('-password');
+    if(!students) {
+        return res.status(400).json({ message: 'Failed to get students' });
+    }
+    res.status(200).json(students);
+}
+
 const register_student = async(req, res) => {
     const { name, email, password, tuition, course } = req.body;
     if(await Student.findOne({ email }) || await Student.findOne({ tuition })) {
@@ -49,5 +65,7 @@ const login_student = async(req, res) => {
 
 module.exports = {
     register_student,
-    login_student
+    login_student,
+    get_all_students,
+    get_by_id
 }

@@ -1,0 +1,33 @@
+.welcome {
+    padding: 1rem 2rem;
+}
+
+.module-div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: black;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.good {
+    color: green;
+}
+.mid {
+    color: yellow;
+}
+.bad {
+    color: red;
+}
+
+.module-status {
+    display: flex;
+    justify-content: space-between;
+}
+
+.module-status ul {
+    list-style-type: none;
+    display: block;
+}
+

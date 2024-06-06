@@ -1,0 +1,67 @@
+.students {
+    padding: 1rem 2rem;
+}
+
+.students-div {
+    display: flex;
+    width: 100%;
+}
+
+.create-student-from {
+    font-size: 1.4em;
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    border-radius: 1.4em;
+    padding: 1em;
+}
+
+.create-student-from input {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 10em;
+    padding: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.create-student-from input::placeholder {
+    font-size: 1.2em;
+}
+
+.create-student-from button {
+    cursor: pointer;
+    margin-top: 1em;
+}
+
+.login-student-form {
+    font-size: 1.4em;
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    border-radius: 1.4em;
+    padding: 1em;
+}
+
+.login-student-form input {
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 10em;
+    padding: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+
+.login-student-form button {
+    cursor: pointer;
+    margin-top: 1em;
+}
+
+.sair {
+    cursor: pointer;
+    margin-top: 1em;
+    background-color: red;
+}
