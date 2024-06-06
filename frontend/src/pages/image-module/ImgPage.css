@@ -1,3 +1,8 @@
 .img-page {
     padding: 1rem 2rem;
 }
+
+.img-list {
+    display: flex;
+    flex-wrap: wrap;
+}

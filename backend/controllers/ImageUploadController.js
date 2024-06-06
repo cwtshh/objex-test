@@ -1,5 +1,6 @@
 const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
 const { initializeApp } = require('firebase/app');
+const Image = require('../models/Image');
 /* const firestore_db = require('../config/firestore_db'); */
 
 
@@ -19,6 +20,7 @@ const storage = getStorage();
 const upload_image = async(req, res) => {
     try {
         const file = req.file;
+        const { student_id } = req.body;
         if(!file) return res.status(400).json({ message: 'No file uploaded'});
         const storageRef = ref(storage, `images/${file.originalname}`);
         const metaData = {
@@ -26,7 +28,28 @@ const upload_image = async(req, res) => {
         };
         const snapshot = await uploadBytesResumable(storageRef, file.buffer, metaData);
         const downloadUrl = await getDownloadURL(storageRef);
+        const new_image = Image.create({
+            student_id: student_id,
+            file_name: file.originalname,
+            download_url: downloadUrl
+        });
+        if(!new_image) {
+            return res.status(400).json({ message: 'Failed to upload file'});
+        }
         return res.status(200).json({ message: 'File uploaded successfully', downloadUrl });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ message: 'Internal server error'});
+    }
+};
+
+const get_all_images = async(req, res) => {
+    try {
+        const images = await Image.find();
+        if(!images) {
+            return res.status(400).json({ message: 'Failed to get images'});
+        }
+        return res.status(200).json(images);
     } catch (err) {
         console.log(err);
         return res.status(500).json({ message: 'Internal server error'});
@@ -37,4 +60,5 @@ const upload_image = async(req, res) => {
 
 module.exports = {
     upload_image,
+    get_all_images
 }

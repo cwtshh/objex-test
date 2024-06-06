@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express();
-const { upload, run_python_code} = require('../controllers/FileController');
+const { upload, run_python_code } = require('../controllers/FileController');
 const File = require('../models/File');
 const path = require('path');
 

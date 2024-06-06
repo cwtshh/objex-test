@@ -1,0 +1,13 @@
+
+.img-card {
+    background-color: black;
+    height: 40vh;
+    width: 24vw;
+    padding: 1em;
+    margin-right: 1.4em;
+    border-radius: 1em;
+}
+
+.img-card img {
+    height: 20em;
+}

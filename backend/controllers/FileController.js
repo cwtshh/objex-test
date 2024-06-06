@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const router = express();
 const File = require('../models/File');
+const Image = require('../models/Image');
 const { exec } = require('child_process');
 const fs = require('fs');
 const { error } = require('console');
