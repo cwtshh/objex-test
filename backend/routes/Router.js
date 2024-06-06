@@ -10,6 +10,7 @@ router.use("/students", require('./StudentRoutes'));
 router.use("/groups", require('./GroupRoutes'));
 router.use("/file", require('./FileRoutes'));
 router.use("/image", require('./ImageRoutes'));
+router.use("/code", require('./CodeRoutes'));
 
 
 

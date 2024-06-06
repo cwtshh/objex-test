@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import './Students.css'
 import '../../config/Routes'
 import { API_BASE_URL } from '../../config/Routes';
@@ -15,12 +15,14 @@ const Students = () => {
     const [ loginPassword, setLoginPassword ] = useState('');
     const [ loggedStudent, setLoggedStudent ] = useState({});
     const [ isLogged, setIsLogged ] = useState(false);
+    /* const [ searchText, setSearchText ] = useState(''); */
+    const [ filteredStudents, setFilteredStudents ] = useState([]);
 
     const get_all_students = async() => {
         try {
             const response = await axios.get(`${API_BASE_URL}/students/get`);
-            /* console.log(response.data); */
             setStudents(response.data);
+            setFilteredStudents(response.data);
         } catch (error) {
             console.error('Failed to get students')
         }
@@ -34,6 +36,7 @@ const Students = () => {
                 tuition: tuition
             });
             setLoggedStudent(response.data);
+
             /* console.log(response.data); */
         } catch (error) {
             console.error('Failed to create student');
@@ -58,7 +61,17 @@ const Students = () => {
     const logout = () => {
         setIsLogged(false);
         setLoggedStudent({});
+        
     };
+
+    const handleSearch = useCallback((e) => {
+        const searchText = e.target.value;
+        const filtered = students.filter(student => {
+            return student.name.toLowerCase().includes(searchText.toLowerCase());
+        });
+        setFilteredStudents(filtered);
+
+    }, [students]);
 
     useEffect(() => {
         get_all_students();
@@ -71,6 +84,7 @@ const Students = () => {
             <h2>Testes</h2>
 
             <h2>Alunos cadastrados: </h2>
+            
 
             <div className='students-div'>
                 {students.length > 0 ? (
@@ -123,6 +137,26 @@ const Students = () => {
             ) : (
                 <></>
             )}
+
+
+            <div>
+                <div className='std-search'>
+                    <input type='text' placeholder='Pesquisar aluno' onChange={handleSearch} />
+                    <button>Pesquisar</button>
+                </div>
+
+                <div className='students-div'>
+                    {filteredStudents.map((student, index) => {
+                        return (
+                            <StudentsCard key={index} student={student} />
+                        )
+                    })}
+                </div>
+
+
+
+            </div>
+
         </div>
     )
 }

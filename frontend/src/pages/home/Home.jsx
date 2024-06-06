@@ -18,8 +18,8 @@ const Home = () => {
         <div className='module-div'>
           <button onClick={() => navigate('/groups')}>Grupos</button>
           <button onClick={() => navigate('/students')}>Alunos (login e registro)</button>
-          <button>Envio de arquivos (imagens)</button>
-          <button>Envio e execução de código</button>
+          <button onClick={() => navigate('/image')}>Envio de arquivos (imagens)</button>
+          <button onClick={() => navigate('/code')}>Envio e execução de código</button>
         </div>
 
         <h2>Status de desenvolvimento de cada módulo:</h2>
@@ -38,7 +38,7 @@ const Home = () => {
             <ul>
               <li className='good'>Registro de alunos</li>
               <li className='mid'>Login de alunos (sem jwt)</li>
-              <li className='bad'>Consultar alunos</li>
+              <li className='good'>Consultar alunos</li>
               <li className='bad'>Remover alunos</li>
             </ul>
           </div>

@@ -1,0 +1,27 @@
+.code-page {
+    padding: 1rem 2rem;
+}
+
+.interpreter-form {
+    background-color: black;
+    padding: 1em;
+    border-radius: 1em;
+    
+}
+
+.interpreter-form textarea {
+    width: 97%;
+    height: 30vh;
+    border-radius: 1em;
+    padding: 1.2em;
+}
+
+.interpreter-output {
+    background-color: white;
+    color: black;
+    resize: none;
+    height: 10vh;
+    margin-top: 1em;
+    width: 97.3%;
+    padding: 1em;
+}

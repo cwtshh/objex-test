@@ -44,7 +44,7 @@ const run_python_code = async(req, res) => {
     }
 
     res.status(200).json({ message: `output: ${stdout}`});
-    fs.unlinkSync(output_file_path);
+
   })
 
 
