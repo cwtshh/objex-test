@@ -28,6 +28,7 @@ const Students = () => {
         }
     };
     const handleSubmit = async(e) => {
+        e.preventDefault();
         try {
             const response = await axios.post(`${API_BASE_URL}/students/register`, {
                 name: name,
@@ -35,9 +36,8 @@ const Students = () => {
                 password: password,
                 tuition: tuition
             });
-            setLoggedStudent(response.data);
-
-            /* console.log(response.data); */
+            console.log(response.data);
+            get_all_students();
         } catch (error) {
             console.error('Failed to create student');
         }
@@ -101,13 +101,13 @@ const Students = () => {
             <h2>Cadastrar aluno:</h2>
             <form className='create-student-from' onSubmit={handleSubmit}>
                 <label>Nome:</label>
-                <input type='text' placeholder='Nome' onChange={e => setName(e.target.value)} />
+                <input type='text' placeholder='Nome' onChange={e => setName(e.target.value)} required />
                 <label>Email:</label>
-                <input type='email' placeholder='Email' onChange={e => setEmail(e.target.value)} />
+                <input type='email' placeholder='Email' onChange={e => setEmail(e.target.value)} required />
                 <label>Senha:</label>
-                <input type='password' placeholder='Senha' onChange={e => setPassword(e.target.value)} />
+                <input type='password' placeholder='Senha' onChange={e => setPassword(e.target.value)} required />
                 <label>Matricula:</label>
-                <input type='text' placeholder='Matricula' onChange={e => setTuition(e.target.value)} />
+                <input type='text' placeholder='Matricula' onChange={e => setTuition(e.target.value)} required />
                 <button type='submit'>Cadastrar</button>
             </form>
 

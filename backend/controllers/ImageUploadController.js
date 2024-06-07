@@ -54,11 +54,21 @@ const get_all_images = async(req, res) => {
         console.log(err);
         return res.status(500).json({ message: 'Internal server error'});
     }
+};
+
+const delete_img_by_id = async(req, res) => {
+    const { id } = req.body;
+    const image = await Image.findByIdAndDelete(id);
+    if(!image) {
+        return res.status(400).json({ message: 'Failed to delete image'});
+    }
+    return res.status(200).json({ message: 'Image deleted successfully'});
 }
 
 
 
 module.exports = {
     upload_image,
-    get_all_images
+    get_all_images,
+    delete_img_by_id
 }

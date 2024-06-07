@@ -6,7 +6,7 @@ const Home = () => {
   const navigate = useNavigate();
   return (
     <div className='welcome'>
-        <h1>Bem vindo ao ObjeX!</h1>
+        <h1>Bem vindo ao ObjeX-TESTES</h1>
         <p>O ObjeX é uma plataforma web de aprendizado gamificado projetada para promover a interatividade e o engajamento dos alunos. 
             Os professores podem criar e gerenciar missões educacionais, oferecendo desafios específicos para os estudantes aprimorarem seus conhecimentos. 
             A plataforma facilita a formação de grupos para colaboração em tarefas e permite o compartilhamento de trabalhos finais entre os alunos, promovendo uma aprendizagem mais colaborativa e envolvente. 
@@ -46,8 +46,8 @@ const Home = () => {
             <h3>Envio de arquivos</h3>
             <ul>
               <li className='good'>Envio de imagens</li>
-              <li className='bad'>Consultar imagens</li>
-              <li className='bad'>Remover imagens</li>
+              <li className='good'>Consultar imagens</li>
+              <li className='good'>Remover imagens</li>
             </ul>
           </div>
           <div>

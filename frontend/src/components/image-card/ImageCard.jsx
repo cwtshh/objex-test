@@ -12,9 +12,9 @@ const ImageCard = ({ image }) => {
             <p>{image.student_id}</p>
         </div> */}
         <div className='img-desc'>
-            <p>{image.file_name}</p>
-            <p>{image._id}</p>
-            <p>{image.student_id}</p>
+            <p><b>Nome do arquivo: </b>{image.file_name}</p>
+            <p><b>_id do arquivo: </b>{image._id}</p>
+            <p><b>_id do estudante: </b>{image.student_id}</p>
         </div>
     </div>
   )
