@@ -4,7 +4,9 @@
 
 .students-div {
     display: flex;
-    width: 100%;
+    flex-wrap: wrap;
+    overflow: scroll;
+    height: 70vh;
 }
 
 .create-student-from {
@@ -81,4 +83,12 @@
 .std-search button {
     cursor: pointer;
     padding: 1em;
+}
+
+.disabled-input {
+    background-color: #343434;
+    width: 30%;
+    padding: 1em;
+    border-radius: 10em;
+    color: #b3b3b3;
 }

@@ -9,6 +9,19 @@ const generate_token = (id) => {
     });
 }
 
+const validate_token = async(req, res) => {
+    const { token } = req.body;
+    if(!token) {
+        return res.status(400).json({ message: 'Token not provided' });
+    }
+
+    const verified = jwt.verify(token, secret);
+    if(!verified) {
+        return res.status(400).json({ message: 'Invalid token' });
+    }
+    return res.status(200).json({ message: 'Token is valid' });
+}
+
 const get_by_id = async(req, res) => {
     const student = await Student.findById(req.params.id).select('-password');
     if(!student) {
@@ -67,5 +80,6 @@ module.exports = {
     register_student,
     login_student,
     get_all_students,
-    get_by_id
+    get_by_id,
+    validate_token
 }

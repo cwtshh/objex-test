@@ -15,11 +15,19 @@ const Home = () => {
         <p><strong>!ATENÇÃO!</strong><i> SITE EM TESTES</i></p>
         
         <h2>Consultar módulos:</h2>
-        <div className='module-div'>
+        {/* <div className='module-div'>
           <button onClick={() => navigate('/groups')}>Grupos</button>
           <button onClick={() => navigate('/students')}>Alunos (login e registro)</button>
           <button onClick={() => navigate('/image')}>Envio de arquivos (imagens)</button>
           <button onClick={() => navigate('/code')}>Envio e execução de código</button>
+        </div> */}
+        <div className='flex justify-between'>
+        <button className="btn rounded-full text-lg" onClick={() => navigate('/groups')}>Grupos</button>
+        <button className="btn rounded-full text-lg" onClick={() => navigate('/students')}>Alunos</button>
+        <button className="btn rounded-full text-lg" onClick={() => navigate('/image')}>Envio de Arquivos</button>
+        <button className="btn rounded-full text-lg" onClick={() => navigate('/code')}>Envio e Execução de Códigos</button>
+        <button className='btn rounded-full text-lg' onClick={() => navigate('/admin')}>Painel de Admin (Professor)</button>
+          
         </div>
 
         <h2>Status de desenvolvimento de cada módulo:</h2>
@@ -37,7 +45,7 @@ const Home = () => {
             <h3>Alunos</h3>
             <ul>
               <li className='good'>Registro de alunos</li>
-              <li className='mid'>Login de alunos (sem jwt)</li>
+              <li className='good'>Login de alunos (sem jwt)</li>
               <li className='good'>Consultar alunos</li>
               <li className='bad'>Remover alunos</li>
             </ul>
@@ -55,6 +63,7 @@ const Home = () => {
             <ul>
               <li className='good'>Envio de código</li>
               <li className='mid'>Execução de código</li>
+              <li className='good'>Interpretação de código</li>
             </ul>
          </div>
         </div>

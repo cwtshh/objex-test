@@ -6,16 +6,19 @@ import { API_BASE_URL } from '../../config/Routes'
 import ImageCard from '../../components/image-card/ImageCard'
 
 const ImgPage = () => {
-
   const [ images, setImages ] = useState([]);
   const [ students, setStudents ] = useState([]);
   const [ student_id, setStudentId ] = useState('');
   const [ file, setFile ] = useState(null);
   const [ image_id, setImageId ] = useState('');
+  const [ loading, setLoading ] = useState(true);
+
   const get_all_images = async() => {
     try {
+      setLoading(true);
       const response = await axios.get(`${API_BASE_URL}/image/get-all`);
       setImages(response.data);
+      setLoading(false);
       /* console.log(response.data); */
     } catch (err) {
       console.log(err);
@@ -44,7 +47,8 @@ const ImgPage = () => {
           'Content-Type': 'multipart/form-data'
         }
       });
-      console.log(response.data);
+      /* console.log(response.data); */
+      get_all_images();
     } catch (err) {
       console.log(err);
     }
@@ -77,37 +81,71 @@ const ImgPage = () => {
         </p>
         <h2>Upload</h2>
         <form onSubmit={handleSubmit}>
-          <input type='file' name='image' accept='image/*' onChange={handleFileChange} />
-          <div className='radio-buttons'>
-                    {students.length > 0 ? (
-                        students.map((student, index) => {
-                            return (
-                                <>
-                                    <input 
-                                        type='radio' 
-                                        key={index} 
-                                        value={student._id} 
-                                        name='student'
-                                        onChange={e => setStudentId(e.target.value)}
-                                    /> <p>{student.name}</p>
-                                </>
-                            )
+          <input 
+            type="file" 
+            className="file-input file-input-bordered w-full max-w-xs"
+            name="image"
+            accept="image/*"
+            onChange={handleFileChange}  
+          />
+          {/* <input type='file' name='image' accept='image/*' onChange={handleFileChange} /> */}
+          <h2>Escolha o aluno</h2>
+          <div>
+              {students.length > 0 ? (
+                students.map((student, index) => {
+                  return (
+                    <>
+
+                      <div key={index} class="form-control">
+                        <label class="label cursor-pointer">
+                          <span class="label-text">{student.name}</span> 
+                            <input 
+                              type="radio" 
+                              name="studnet" 
+                              class="radio checked:bg-red-500"
+                              value={student._id}
+                              onChange={e => setStudentId(e.target.value)}
+                            />
+                          </label>
+                      </div>
+                    </>
+                    )
                         })
                     ) : (
-                        <>
-                            <h3 className='bad'>Não há estudantes cadastrados!</h3>
-                            <button>Cadastrar estudantes</button>
-                        </>
-                    )}
-                </div>
-                <button>Enviar</button>
+                      <>
+                        <h3 className='bad'>Não há estudantes cadastrados!</h3>
+                        <button type='submit' className='btn'>Cadastrar estudantes</button>
+                      </>
+          )}
+          </div>
+          <button type='submit' className='btn'>Enviar</button>
         </form>
         <h2>Baixar imagens</h2>
+        {images.map((image, index) => {
+          return (
+            <button key={index} className='btn mr-2' >
+              <a  download={image.download_url}>{image.file_name}</a>
+            </button>
+          )
+        })}
         <p className='bad'>Não implementado</p>
 
-        <h3>Imagens cadastradas</h3>
+        <h2>Imagens cadastradas</h2>
         <div className='img-list'>
-          {images.length > 0 ? (
+          {!loading && images.length > 0 ? (
+            images.length > 0 ? (
+              images.map((image, index) => {
+                return (
+                  <ImageCard key={index} image={image} />
+                )
+              })
+            ) : (
+              <p className='bad'>Não há imagens cadastradas</p>
+            )
+          ) : (
+            <span className="loading loading-spinner loading-lg"></span>
+          )}
+          {/* {images.length > 0 ? (
             images.map((image, index) => {
               return (
                 <ImageCard key={index} image={image} />
@@ -115,16 +153,26 @@ const ImgPage = () => {
             })
           ) : (
             <p className='bad'>Não há imagens cadastradas</p>
-          )}
+          )} */}
         </div>
 
-        <h3>Deletar imagens</h3>
+        <h2>Deletar imagem</h2>
         
         <form onSubmit={handleDeleteImage}>
-          <label>Id da imagem</label>
+          {/* <label>Id da imagem</label>
           <input type='text' placeholder='Digite o id da imagem' onChange={e => setImageId(e.target.value)} />
-          <button type='submit'>Deletar</button>
+          <button type='submit'>Deletar</button> */}
+          <input 
+            type="text" 
+            placeholder="Digite a id da imagem a ser deletada" 
+            className="input input-bordered w-full max-w-xs"
+            onChange={e => setImageId(e.target.value)}
+            style={{ marginRight: '10px'}}
+          />
+          <button type='submit' className='btn'>Deletar</button>
         </form>
+
+
     </div>
   )
 }

@@ -6,39 +6,53 @@ import '../../config/Routes'
 import { API_BASE_URL } from '../../config/Routes';
 
 const GroupCard = ({ group }) => {
+    const [ students, setStudents ] = useState([]);
+    
     const get_student_name = async(id) => {
-        const student = await axios.get(`${API_BASE_URL}/students/get/${id}`);
-        return student.data;
+        try {
+            const response = await axios.get(`${API_BASE_URL}/students/get/${id}`);
+            /* console.log(response.data); */
+            return response.data;
+            
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    const [ students, setStudents ] = useState([]);
+    const get_all_students = async() => {
+        for (let i = 0; i < group.members.length; i++) {
+            const student = await get_student_name(group.members[i]);
+            setStudents([...students, student]);
+        }
+    };
 
-    /* useEffect(() => {
-        group.members.map(async(member, index) => {
-            const student = await get_student_name(member);
-            students.push(student);
-        });
-        console.log(students);
-    }, []) */
-
+    useEffect(() => {
+        get_all_students();
+    }, []);
     
     return (
-        <div className='card'>
-            <h3 style={{overflow: "hidden", width: '10em'}}>{group.name}</h3>
-            <p className='desc'>{group.description}</p>
-            <p>Integrantes:</p>
-            <div className='members-div'>
+
+    <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card-body">
+            <h2 className="card-title">{group.name}</h2>
+            <div className='overflow-y-scroll h-64'>
+                <p>{group.description}</p>
+            </div>
+
+            <div className='overflow-y-scroll h-40'>
+
                 {group.members.length > 0 ? (
-                    group.members.map((member, index) => {
+                    students.map((student, index) => {
                         return (
-                            <p key={index}>{}</p>
+                            <p key={index}>{students[index].name}</p>
                         )
                     })
                 ) : (
-                    <p className='bad'>Não há integrantes cadastrados</p>
+                    <p>Não há integrantes neste grupo.</p>
                 )}
             </div>
         </div>
+    </div>
   )
 }
 

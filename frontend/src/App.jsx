@@ -9,6 +9,7 @@ import Groups from './pages/group-module/Groups'
 import Students from './pages/students-module/Students'
 import ImgPage from './pages/image-module/ImgPage'
 import Code from './pages/code-module/Code'
+import AdminPanel from './pages/admin-panel/AdminPanel'
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path='/students' element={<Students />} />
             <Route path='/image' element={<ImgPage />} />
             <Route path='/code' element={<Code />} />
+            <Route path='/admin' element={<AdminPanel />} />
           </Routes>
         </BrowserRouter>
         

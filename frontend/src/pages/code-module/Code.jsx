@@ -36,12 +36,6 @@ const Code = () => {
     }
   };
 
-/*   useEffect(() => {
-
-  }, [output]) */
-
-
-  /* console.log(code) */
   return (
     <div className='code-page'>
         <h1>Modulo de codigos</h1>
@@ -54,24 +48,37 @@ const Code = () => {
 
         <h2 className='bad'>Envio de código - Com execução</h2>
         <form>
-            
-            <button>Enviar</button>
+          <input
+            type='file'
+            className='file-input file-input-bordered w-full max-w-xs'
+          />
+          <button className='btn'>Enviar</button>
         </form>
 
         <h2>Interpretador no site</h2>
-        <form className='interpreter-form' onSubmit={handleCodeInterpreter}>
-          <textarea 
+        <form onSubmit={handleCodeInterpreter}>
+          <textarea
+            className='textarea textarea-bordered h-24'
+            placeholder='Digite seu código aqui...'
             value={code}
-            onKeyDown={handleKeyDown} 
-            type='text' 
-            onChange={e => setCode(e.target.value)} 
-            rows="10"
-            cols="50" 
+            onChange={(e) => setCode(e.target.value)}
+            onKeyDown={handleKeyDown}
+            rows='10'
+            cols='50'
+            style={{ resize: 'none', width: '100%', height: '100%', fontSize: '1.5rem'}}
           />
-          <button type='submit'>Rodar</button>
+          <button type='submit' className='btn'>Run</button>
         </form>
 
-        <textarea value={output} className='interpreter-output' readOnly />
+        <h2>Output</h2>
+        <textarea
+          value={output.slice(8)}
+          className='textarea textarea-primary textarea-bordered h-40'
+          readOnly
+          style={{ resize: 'none', width: '100%', fontSize: '1em'}}
+        />
+
+        {/* <textarea value={output} className='interpreter-output' readOnly /> */}
     </div>
   )
 }
