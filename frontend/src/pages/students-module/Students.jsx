@@ -122,7 +122,7 @@ const Students = () => {
                 )}
             </div>
 
-            {/* <h2>Cadastrar aluno:</h2> */}
+            <h2>Cadastrar aluno:</h2>
             <button className='btn mr-5 text-xl' onClick={() => document.getElementById('reg-student-modal').showModal()}>Cadastrar aluno</button>
             {/* <Students_modal handleSubmit={null} /> */}
             <dialog id="reg-student-modal" className="modal">

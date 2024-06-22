@@ -1,73 +1,72 @@
 
-import { useNavigate } from 'react-router-dom'
 import './Home.css'
+import { useContext, useState } from 'react';
+import ErrorModal from '../../components/error-modal/ErrorModal';
+import '../../config/Routes';
+import Navbar from '../../components/navbar/Navbar';
+import { AuthContext } from '../../hooks/AuthGuard';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const [ matricula, setMatricula] = useState('');
+  const [ senha, setSenha ] = useState('');
+  const { login, signed } = useContext(AuthContext);
   const navigate = useNavigate();
-  return (
-    <div className='welcome'>
-        <h1>Bem vindo ao ObjeX-TESTES</h1>
-        <p>O ObjeX é uma plataforma web de aprendizado gamificado projetada para promover a interatividade e o engajamento dos alunos. 
-            Os professores podem criar e gerenciar missões educacionais, oferecendo desafios específicos para os estudantes aprimorarem seus conhecimentos. 
-            A plataforma facilita a formação de grupos para colaboração em tarefas e permite o compartilhamento de trabalhos finais entre os alunos, promovendo uma aprendizagem mais colaborativa e envolvente. 
-            É uma ferramenta inovadora que visa tornar o processo de aprendizagem mais dinâmico e eficaz.
-        </p>
-        <p><strong>!ATENÇÃO!</strong><i> SITE EM TESTES</i></p>
-        
-        <h2>Consultar módulos:</h2>
-        {/* <div className='module-div'>
-          <button onClick={() => navigate('/groups')}>Grupos</button>
-          <button onClick={() => navigate('/students')}>Alunos (login e registro)</button>
-          <button onClick={() => navigate('/image')}>Envio de arquivos (imagens)</button>
-          <button onClick={() => navigate('/code')}>Envio e execução de código</button>
-        </div> */}
-        <div className='flex justify-between'>
-        <button className="btn rounded-full text-lg" onClick={() => navigate('/groups')}>Grupos</button>
-        <button className="btn rounded-full text-lg" onClick={() => navigate('/students')}>Alunos</button>
-        <button className="btn rounded-full text-lg" onClick={() => navigate('/image')}>Envio de Arquivos</button>
-        <button className="btn rounded-full text-lg" onClick={() => navigate('/code')}>Envio e Execução de Códigos</button>
-        <button className='btn rounded-full text-lg' onClick={() => navigate('/admin')}>Painel de Admin (Professor)</button>
-          
-        </div>
 
-        <h2>Status de desenvolvimento de cada módulo:</h2>
-        <div className='module-status'>
-         <div>
-            <h3>Grupos</h3>
-            <ul>
-              <li className='good'>Adicionar grupos</li>
-              <li className='good'>Consultar grupos</li>
-              <li className='good'>Adicionar alunos</li>
-              <li className='good'>Remover alunos</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Alunos</h3>
-            <ul>
-              <li className='good'>Registro de alunos</li>
-              <li className='good'>Login de alunos (sem jwt)</li>
-              <li className='good'>Consultar alunos</li>
-              <li className='bad'>Remover alunos</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Envio de arquivos</h3>
-            <ul>
-              <li className='good'>Envio de imagens</li>
-              <li className='good'>Consultar imagens</li>
-              <li className='good'>Remover imagens</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Envio e execução de código</h3>
-            <ul>
-              <li className='good'>Envio de código</li>
-              <li className='mid'>Execução de código</li>
-              <li className='good'>Interpretação de código</li>
-            </ul>
-         </div>
-        </div>
-    </div>
+  const handleLogin = async(e) => {
+    e.preventDefault();
+    if(matricula === '' || senha === '') {
+      const modal = document.getElementById('my_modal_1');
+      modal.showModal();
+      return;
+    }
+    const user = {
+      tuition: matricula,
+      password: senha
+    }
+    const response = await login(user);
+    // console.log(response);
+    if(response) {
+      const modal = document.getElementById('my_modal_1');
+      modal.showModal();
+      return;
+    }
+
+    navigate('/student/dashboard');
+
+    
+  }
+
+  return (
+    <>
+      <Navbar />
+      <div className='text-center'>
+        <h1>Bem vindo ao ObjeX!</h1>
+        <form onSubmit={handleLogin} className='flex justify-center'>
+            <div className="card w-96 bg-base-100 shadow-xl">
+              <div className="card-body items-center text-center">
+                <h2 className="card-title">Login</h2>
+                <label className="input input-bordered flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
+                  <input type="text" className="grow" placeholder="Matricula" onChange={e => setMatricula(e.target.value)} />
+                </label>
+                <label className="input input-bordered flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" /></svg>
+                  <input type="password" className="grow" placeholder="Senha" onChange={e => setSenha(e.target.value)} />
+                </label>
+                <div className="card-actions">
+                  <button className="btn btn-primary">Logar</button>
+                </div>
+              </div>
+            </div>
+        </form>
+
+        <p>Ainda não recebeu seus dados de login?</p>
+        <button className="btn">Entre em contato</button>
+
+        <ErrorModal error="Falha ao logar" message="Email ou senha invalidos" />  
+      </div>
+    </>
   )
 }
 

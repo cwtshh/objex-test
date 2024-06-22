@@ -6,7 +6,7 @@ import { API_BASE_URL } from '../../config/Routes'
 
 const Code = () => {
   const [code, setCode] = useState('');
-  const [output, setOutput] = useState('')
+  const [output, setOutput] = useState('');
 
   const handleCodeInterpreter = async(e) => {
     e.preventDefault();

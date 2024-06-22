@@ -10,6 +10,9 @@ import Students from './pages/students-module/Students'
 import ImgPage from './pages/image-module/ImgPage'
 import Code from './pages/code-module/Code'
 import AdminPanel from './pages/admin-panel/AdminPanel'
+import Interpreter from './pages/interpreter-test/Interpreter'
+import StudenntDashboard from './pages/student-dashboard/StudentDashboard'
+import ProcectDashBoard from './pages/student-dashboard/ProcectDashBoard'
 
 
 function App() {
@@ -19,17 +22,19 @@ function App() {
     <>
       <div className='App'>
         <BrowserRouter>
-          <Navbar />
           <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/groups' element={<Groups />} />
+            <Route path='/student/dashboard' element={<ProcectDashBoard />} />
+            <Route path='/teacher/login' element={<Home />} />
+            {/* <Route path='/groups' element={<Groups />} />
             <Route path='/students' element={<Students />} />
             <Route path='/image' element={<ImgPage />} />
             <Route path='/code' element={<Code />} />
             <Route path='/admin' element={<AdminPanel />} />
+            <Route path='/interpreter' element={<Interpreter />} /> */}
           </Routes>
         </BrowserRouter>
-        
+        {/* <Footer /> */}
       </div>
     </>
   )

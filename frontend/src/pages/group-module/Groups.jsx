@@ -50,7 +50,7 @@ const Groups = () => {
     }
 
     const handleSubmit = async(e) => {
-        /* e.preventDefault(); */
+        e.preventDefault();
         try {
             const response = await axios.post(`${API_BASE_URL}/groups/create`, {
                 name: groupName,
