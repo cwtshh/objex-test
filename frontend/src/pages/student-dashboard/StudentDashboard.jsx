@@ -1,11 +1,17 @@
-import React, { useContext } from 'react'
+import { useContext, useState } from 'react'
 import './StudentDashboard.css'
-import GroupCard from '../../components/group-card/GroupCard'
 import { Link } from 'react-router-dom'
 import { AuthContext } from '../../hooks/AuthGuard'
+import { useGetAllGroups } from '../../hooks/useGetAllGroups'
 
 const StudentDashboard = () => {
   const { user, logout } = useContext(AuthContext);
+  const [ groups, setGroups ] = useState([]);
+
+  useState(() => {
+    const groups = useGetAllGroups();
+    setGroups(groups);
+  }, [])
   console.log(user);
   return (
     <>
@@ -35,14 +41,24 @@ const StudentDashboard = () => {
       <div className='dashboard'>
         <h1>Dashboard</h1>
 
-        <h3>Olá, {user.user.name}!</h3>
+        <h3>Olá, {user.name}!</h3>
 
         <h2>Atividades</h2>
         <p>PLACEHORLDER</p>
 
 
         <h2>Grupos disponíveis</h2>
-        <p>PLACEHOLDER</p>
+        {groups.length > 0 ? groups.map((group, index)=> {
+          return (
+            <div key={index} className="card bg-base-100">
+              <div className="card-body">
+                <h2 className="card-title">{group.name}</h2>
+                <p>{group.description}</p>
+                <button className="btn btn-primary">Entrar</button>
+              </div>
+            </div>
+          )
+        }) : <p>Não há grupos disponíveis</p>}
       </div>
 
     </>

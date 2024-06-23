@@ -31,10 +31,7 @@ const Home = () => {
       modal.showModal();
       return;
     }
-
     navigate('/student/dashboard');
-
-    
   }
 
   return (
