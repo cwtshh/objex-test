@@ -1,4 +1,2 @@
-node_modules
 .env
-ServiceAccount.json
-uploads/*
+node_modules/
