@@ -6,5 +6,6 @@ router.get('/', (req, res) => {
 });
 
 router.use('/professor', require('./ProfessorRoutes'));
+router.use('/grupo', require('./GrupoRoutes'));
 
 module.exports = router;

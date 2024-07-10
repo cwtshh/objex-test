@@ -1,6 +1,8 @@
 const Professor = require('../models/Professor');
 const Aluno = require('../models/Aluno');
 const Monitor = require('../models/Monitor');
+const Group = require('../models/Group');
+const Turma  = require('../models/Turma');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.jwt_secret_teacher;
@@ -27,11 +29,13 @@ const verify_token = async(req, res) => {
 
 const authenticate_token = (req, res, next) => {
     const authHeader = req.headers['authorization'];
+    console.log(authHeader)
     const token = authHeader && authHeader.split(' ')[1];
     if(!token) return res.status(401).json({ message: 'Token não fornecido' });
     jwt.verify(token, secret, (err, user) => {
         if(err) return res.status(403).json({ message: 'Token inválido' });
         req.user = user;
+        console.log("AUTHENTICATED")
         next();
     })
 };
@@ -106,10 +110,64 @@ const register_aluno = async(req, res) => {
     res.status(201).json({ message: 'Aluno cadastrado com sucesso' });
 };
 
+const create_group = async(req, res) => {
+    const { nome, descricao, turma} = req.body;
+    if(!nome || !descricao || !turma) {
+        return res.status(400).json({ message: 'Preencha todos os campos' });
+    }
+    const new_group = await Group.create({
+        nome,
+        descricao,
+        turma,
+    });
+    if(!new_group) {
+        return res.status(500).json({ message: 'Erro ao criar grupo' });
+    }
+    res.status(201).json({ message: 'Grupo criado com sucesso' });
+}
+
+const get_professores_name_id = async(req, res) => {
+    const professores = await Professor.find({}, { nome: 1, _id: 1});
+    if(!professores) {
+        return res.status(500).json({ message: 'Erro ao buscar professores' });
+    };
+    res.status(200).json(professores);
+};
+
+const create_turma = async(req, res) => {
+    const { nome, professor_id } = req.body;
+    if(!nome || !professor_id) {
+        return res.status(400).json({ message: 'Preencha todos os campos' });
+    }
+    if(!await Professor.findOne({ _id: professor_id })) {
+        return res.status(400).json({ message: 'Professor não encontrado' });
+    }
+    const new_turma = await Turma.create({
+        nome,
+        professor: professor_id
+    });
+    if(!new_turma) {
+        return res.status(500).json({ message: 'Erro ao criar turma' });
+    }
+    res.status(201).json({ message: 'Turma criada com sucesso' });
+};
+
+const get_turmas = async(req, res) => {
+    const turmas = await Turma.find();
+    if(!turmas) {
+        return res.status(500).json({ message: 'Erro ao buscar turmas' });
+    }
+    res.status(200).json(turmas);
+}
+
 module.exports = {
     register_professor,
     login_professor,
     authenticate_token,
     register_aluno,
-    verify_token
+    verify_token,
+    create_group,
+    get_professores_name_id,
+    create_turma,
+    get_turmas
 }
