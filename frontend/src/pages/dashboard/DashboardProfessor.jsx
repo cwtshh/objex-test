@@ -25,6 +25,13 @@ const DashboardProfessor = () => {
 
   const [ turmas, setTurmas ] = useState([]);
 
+  const [ nomeAluno, setNomeAluno ] = useState("");
+  const [ emailAluno, setEmailAluno ] = useState("");
+  const [ senhaAluno, setSenhaAluno ] = useState("");
+  const [ turmaAluno, setTurmaAluno ] = useState("");
+  const [ matriculaAluno, setMatriculaAluno ] = useState("");
+
+
   const handleGroupCreation = async(e) => {
     e.preventDefault();
     if(groupName === "" || groupDesc === "" || groupTurma === "") {
@@ -66,6 +73,26 @@ const DashboardProfessor = () => {
     });
     // document.getElementById("turmas").open = false;
   };
+
+  const handleAlunoCreation = async(e) => {
+    e.preventDefault();
+    if(nomeAluno === "" || emailAluno === "" || senhaAluno === "" || turmaAluno === "", matriculaAluno === "") {
+      alert("Preencha todos os campos!");
+      return;
+    }
+    // console.log(nomeAluno, emailAluno, senhaAluno, turmaAluno, matriculaAluno);
+    await axiosInstance.post('/professor/register/aluno', {
+      nome: nomeAluno,
+      email: emailAluno,
+      senha: senhaAluno,
+      turma: turmaAluno,
+      matricula: matriculaAluno
+    }).then(res => {
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
 
   const export_excel = async() => {
     const workbook = new ExcelJS.Workbook();
@@ -182,7 +209,7 @@ const DashboardProfessor = () => {
 
         <h1 className='text-xl font-bold mt-6'>Alunos</h1>
         <div className='mt-6'>
-          <button className='btn btn-primary mb-6'>Adicionar Aluno</button>
+          <button className='btn btn-primary mb-6' onClick={()=>document.getElementById('alunos').showModal()}>Adicionar Aluno</button>
         </div>
 
         <Toast type={'success'} message={"Turma criada!"} show={showToast} onClose={handleCloseToast} />
@@ -286,11 +313,89 @@ const DashboardProfessor = () => {
             <button>close</button>
           </form>
         </dialog>
+
+        <dialog id="alunos" className="modal">
+          <div className="modal-box flex flex-col justify-center items-center text-center">
+            <h3 className="font-bold text-lg">Alunos</h3>
+            <form method="dialog">
+              {/* if there is a button in form, it will close the modal */}
+              <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            </form>
+
+            <h4>Cadastrar Aluno</h4>
+            <form method='dialog' onSubmit={handleAlunoCreation}>
+              <label className="form-control w-full max-w-xs">
+                <div className="label">
+                  <span className="label-text">Nome:</span>
+                </div>
+                <input 
+                  type="text"
+                  className="input input-bordered w-full max-w-xs" 
+                  onChange={e => setNomeAluno(e.target.value)}
+                />
+              </label>
+
+              <label className="form-control w-full max-w-xs">
+                <div className="label">
+                  <span className="label-text">Matricula:</span>
+                </div>
+                <input 
+                  type="text"
+                  className="input input-bordered w-full max-w-xs" 
+                  onChange={e => setMatriculaAluno(e.target.value)}
+                />
+              </label>
+
+              <label className="form-control w-full max-w-xs">
+                <div className="label">
+                  <span className="label-text">Email:</span>
+                </div>
+                <input 
+                  type="text"
+                  className="input input-bordered w-full max-w-xs" 
+                  onChange={e => setEmailAluno(e.target.value)}
+                />
+              </label>
+
+              <label className="form-control w-full max-w-xs">
+                <div className="label">
+                  <span className="label-text">Senha:</span>
+                </div>
+                <input 
+                  type="text"
+                  className="input input-bordered w-full max-w-xs" 
+                  onChange={e => setSenhaAluno(e.target.value)}
+                />
+              </label>
+
+              <label className="form-control w-full max-w-xs">
+                <div className="label">
+                  <span className="label-text">Turma:</span>
+                </div>
+                <select className="select select-bordered" onChange={e => setTurmaAluno(e.target.value)}>
+                  <option disabled selected>Selecione uma Turma</option>
+                  {turmas ? turmas.map(turma => {
+                    return (
+                      <option value={turma.nome}>{turma.nome}</option>
+                    )
+                  }) : <option disabled>Não há professors cadastrados.</option>}
+                </select>
+              </label>
+
+              <div className='modal-cation'>
+                <button type='submit' className='btn btn-primary mt-6'>Cadastrar</button>
+              </div>
+            </form>
+
+          </div>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
+        </dialog>
+        
+
+
       </div>
-
-
-
-      
     </div>
   )
 }

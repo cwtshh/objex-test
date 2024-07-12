@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useProfessorAuth } from '../../context/ProfessorAuthContext'
+import { useAlunoAuth } from '../../context/AlunoAuthContext';
 
-const NavBarDashboardProfessor = () => {
-    const { logout } = useProfessorAuth();
+const NavBarDashboardAluno = () => {
+    const { logout_aluno } = useAlunoAuth();
     return (
         <div className="navbar bg-base-100">
             <div className="flex-1">
-                <Link to='/professor/dashboard' className="btn btn-ghost text-xl">ObjeX</Link>
+                <Link to='/aluno/dashboard' className="btn btn-ghost text-xl">ObjeX</Link>
             </div>
             <div className="flex-none">
                 <div className="dropdown dropdown-end">
@@ -25,7 +26,7 @@ const NavBarDashboardProfessor = () => {
                     <Link>Perfil</Link>
                     </li>
                     <li><a>Configurações</a></li>
-                    <li><button onClick={() => logout()}>Logout</button></li>
+                    <li><button onClick={() => logout_aluno()}>Logout</button></li>
                 </ul>
                 </div>
             </div>
@@ -33,4 +34,4 @@ const NavBarDashboardProfessor = () => {
     )
 }
 
-export default NavBarDashboardProfessor
+export default NavBarDashboardAluno

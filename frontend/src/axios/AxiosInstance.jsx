@@ -8,8 +8,17 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config) => {
         const AdminToken = localStorage.getItem('objexAuth@token');
+        const AlunoToken = localStorage.getItem('objexAuth@Alunotoken');
         if(AdminToken) {
             config.headers.Authorization = `Bearer ${AdminToken}`;
+        }
+        if(AlunoToken) {
+            config.headers.Authorization = `Bearer ${AlunoToken}`;
+        }
+
+        if(AlunoToken && AdminToken) {
+            console.log("QUE?");
+            return Promise.reject('Ambos os tokens estão presentes');
         }
 
         return config;

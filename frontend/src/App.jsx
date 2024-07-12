@@ -4,6 +4,8 @@ import LoginAluno from './pages/login/LoginAluno'
 import LoginProfessor from './pages/login/LoginProfessor'
 import ProtectedRouteProfessor from './components/protected-route/ProtectedRouteProfessor'
 import DashboardProfessor from './pages/dashboard/DashboardProfessor'
+import ProtectedRouteAluno from './components/protected-route/ProtectedRouteAluno'
+import DashboardAluno from './pages/dashboard/DashboardAluno'
 
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
             <Route path='/login/aluno' element={<LoginAluno />}/>
             <Route path='/login/professor' element={<LoginProfessor />}/>
             <Route path='/professor/dashboard' element={<ProtectedRouteProfessor component={DashboardProfessor} />}/>
+            <Route path='/aluno/dashboard' element={<ProtectedRouteAluno component={DashboardAluno} />}/>
           </Routes>
         </BrowserRouter>
       </div>
