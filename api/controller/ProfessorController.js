@@ -6,6 +6,10 @@ const Turma  = require('../models/Turma');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.jwt_secret_teacher;
+const nodemailer = require('nodemailer');
+const email = process.env.nodemailer_email;
+const pass = process.env.nodemailer_pass;
+
 
 const generate_token = (id) => {
     return jwt.sign({ id }, secret, {
@@ -29,13 +33,13 @@ const verify_token = async(req, res) => {
 
 const authenticate_token = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    console.log(authHeader)
+    // console.log(authHeader)
     const token = authHeader && authHeader.split(' ')[1];
     if(!token) return res.status(401).json({ message: 'Token não fornecido' });
     jwt.verify(token, secret, (err, user) => {
         if(err) return res.status(403).json({ message: 'Token inválido' });
         req.user = user;
-        console.log("AUTHENTICATED")
+        // console.log("AUTHENTICATED")
         next();
     })
 };
@@ -81,6 +85,7 @@ const login_professor = async(req, res) => {
             id: professor._id,
             nome: professor.nome,
             email: professor.email,
+            turma: professor.turma,
             token: generate_token(professor._id)
         }
     )
@@ -160,40 +165,95 @@ const get_turmas = async(req, res) => {
     res.status(200).json(turmas);
 };
 
-const create_atividade = async(req, res) => {
-    const { nome, dataEntrega, enunciado, professor_id, turma_id } = req.body;
-    if(!nome || !dataEntrega || !enunciado || !professor_id || !turma_id) {
-        return res.status(400).json({ message: 'Preencha todos os campos' });
-    }
-
-    if(!await Professor.findOne({ _id: professor_id })) {
-        return res.status(400).json({ message: 'Professor não encontrado' });
-    }
-    if(!await Turma.findOne({ _id: turma_id })) {
-        return res.status(400).json({ message: 'Turma não encontrada' });
-    }
-
-    const new_atividade = await Atividade.create({
-        nome,
-        dataEntrega,
-        enunciado,
-        professor: professor_id,
-        turma: turma_id
-    });
-
-    if(!new_atividade) {
-        return res.status(500).json({ message: 'Erro ao criar atividade' });
-    }
-
-    res.status(201).json({ message: 'Atividade criada com sucesso' });
-};
-
 const get_all_students = async(req, res) => {
     const alunos = await Aluno.find().select('nome email turma matricula');
     if(!alunos) {
         return res.status(500).json({ message: 'Erro ao buscar alunos' });
     }
     res.status(200).json(alunos);
+};
+
+const auto_generate_password = () => {
+    const length = 8;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let password = "";
+    for(let i = 0; i < length; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    return password;
+}
+
+const create_many_alunos = async(req, res) => {
+    const {alunos, turma} = req.body;
+    // console.log(alunos);
+    // console.log(turma);
+    if(!alunos || !turma) {
+        return res.status(400).json({ message: 'Preencha todos os campos' });
+    }
+
+    alunos.forEach(async(aluno) => {
+        const password = auto_generate_password();
+        const salt = await bcrypt.genSalt();
+        const pass_hash = await bcrypt.hash(password, salt);
+        const new_aluno = {
+            nome: aluno.nome,
+            email: aluno.email,
+            senha: pass_hash,
+            turma,
+            matricula: aluno.matricula
+        };
+        await Aluno.create(new_aluno);
+        if(!new_aluno) {
+            return res.status(500).json({ message: 'Erro ao cadastrar alunos' });
+        }
+        const mailOptions = {
+            from: process.env.nodemailer_email,
+            to: aluno.email,
+            subject: 'ObjeX - Cadastro Automático',
+            text: `Olá, ${aluno.nome}! Você foi cadastrado no sistema ObjeX.\nSeguem seus dados de login:\nMatricula: ${aluno.matricula}\n Senha: ${password}\n`
+        }
+        console.log(email, pass)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            auth: {
+                user: email,
+                pass: pass,
+            }
+        });
+        transporter.sendMail(mailOptions, (error, info) => {
+            if(error) {
+                console.log(error);
+            } else {
+                console.log('Email enviado: ' + info.response);
+            }
+        });
+    })
+    res.status(201).json({ message: 'Alunos cadastrados com sucesso' });
+};
+
+const create_atividade = async(req, res) => {
+    const { nome, dataEntrega, enunciado, professor_id, turma } = req.body;
+    if(!nome || !dataEntrega || !enunciado || !professor_id || !turma) {
+        return res.status(400).json({ message: 'Preencha todos os campos' });
+    }
+    if(!await Professor.findOne({ _id: professor_id })) {
+        return res.status(400).json({ message: 'Professor não encontrado' });
+    }
+    if(!await Turma.findOne({ nome: turma })) {
+        return res.status(400).json({ message: 'Turma não encontrada' });
+    }
+    const new_atividade = await Atividade.create({
+        nome,
+        dataEntrega,
+        enunciado,
+        professor: professor_id,
+        turma
+    });
+    if(!new_atividade) {
+        return res.status(500).json({ message: 'Erro ao criar atividade' });
+    }
+    res.status(201).json({ message: 'Atividade criada com sucesso' });
 };
 
 module.exports = {
@@ -207,5 +267,6 @@ module.exports = {
     create_turma,
     get_turmas,
     create_atividade,
-    get_all_students
+    get_all_students,
+    create_many_alunos
 }

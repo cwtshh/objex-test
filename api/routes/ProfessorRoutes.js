@@ -12,7 +12,8 @@ const {
     create_turma,
     get_turmas,
     create_atividade,
-    get_all_students
+    get_all_students,
+    create_many_alunos
 } = require('../controller/ProfessorController');
 
 router.get('/', (req, res) => {
@@ -27,6 +28,7 @@ router.post('/verify', verify_token);
 router.post('/create/grupo', authenticate_token, create_group);
 router.post('/create/turma', authenticate_token, create_turma);
 router.post('/create/atividade', authenticate_token, create_atividade);
+router.post('/create/alunos', authenticate_token, create_many_alunos);
 
 
 

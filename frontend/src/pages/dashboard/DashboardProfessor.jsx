@@ -8,6 +8,7 @@ import Toast from '../../components/toast/Toast';
 import axios from 'axios';
 import GroupCard from '../../components/groupcard/GroupCard';
 import ExcelJS from 'exceljs';
+import FileUpload from '../../components/file-upload/FileUpload';
 
 const DashboardProfessor = () => {
   const { professor } = useProfessorAuth();
@@ -254,6 +255,10 @@ const DashboardProfessor = () => {
           </table>
         </div>
 
+        <h1 className='text-xl mt-6 font-bold'>Adicionar Estudantes - Excel</h1>
+
+        <FileUpload />
+
         <Toast type={'success'} message={"Turma criada!"} show={showToast} onClose={handleCloseToast} />
 
         <dialog id="cadastrar_grupo" className="modal">
@@ -337,9 +342,9 @@ const DashboardProfessor = () => {
                 </div>
                 <select className="select select-bordered" onChange={e => setProfessor_id(e.target.value)}>
                   <option disabled selected>Selecione um Professor</option>
-                  {professores ? professores.map(prof => {
+                  {professores ? professores.map((prof, index) => {
                     return (
-                      <option value={prof._id}>{prof.nome}</option>
+                      <option key={index} value={prof._id}>{prof.nome}</option>
                     )
                   }) : <option disabled>Não há professors cadastrados.</option>}
                 </select>
