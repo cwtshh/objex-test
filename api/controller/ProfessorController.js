@@ -6,6 +6,10 @@ const Turma  = require('../models/Turma');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.jwt_secret_teacher;
+const nodemailer = require('nodemailer');
+const email = process.env.nodemailer_email;
+const pass = process.env.nodemailer_pass;
+
 
 const generate_token = (id) => {
     return jwt.sign({ id }, secret, {
@@ -81,6 +85,7 @@ const login_professor = async(req, res) => {
             id: professor._id,
             nome: professor.nome,
             email: professor.email,
+            turma: professor.turma,
             token: generate_token(professor._id)
         }
     )
@@ -196,6 +201,69 @@ const get_all_students = async(req, res) => {
     res.status(200).json(alunos);
 };
 
+const auto_generate_password = () => {
+    const length = 8;
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let password = "";
+    for(let i = 0; i < length; i++) {
+        password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    return password;
+}
+
+const create_many_alunos = async(req, res) => {
+    const {alunos, turma} = req.body;
+    // console.log(alunos);
+    // console.log(turma);
+    if(!alunos || !turma) {
+        return res.status(400).json({ message: 'Preencha todos os campos' });
+    }
+
+    const array_size = alunos.length;
+    let success_count = 0;
+
+
+    alunos.forEach(async(aluno) => {
+        const password = auto_generate_password();
+        const salt = await bcrypt.genSalt();
+        const pass_hash = await bcrypt.hash(password, salt);
+        const new_aluno = {
+            nome: aluno.nome,
+            email: aluno.email,
+            senha: pass_hash,
+            turma,
+            matricula: aluno.matricula
+        };
+        await Aluno.create(new_aluno);
+        if(!new_aluno) {
+            return res.status(500).json({ message: 'Erro ao cadastrar alunos' });
+        }
+        const mailOptions = {
+            from: process.env.nodemailer_email,
+            to: aluno.email,
+            subject: 'ObjeX - Cadastro Automático',
+            text: `Olá, ${aluno.nome}! Você foi cadastrado no sistema ObjeX.\nSeguem seus dados de login:\nMatricula: ${aluno.matricula}\n Senha: ${password}\n`
+        }
+        console.log(email, pass)
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            host: 'smtp.gmail.com',
+            auth: {
+                user: email,
+                pass: pass,
+            }
+        });
+        transporter.sendMail(mailOptions, (error, info) => {
+            if(error) {
+                console.log(error);
+            } else {
+                console.log('Email enviado: ' + info.response);
+            }
+        });
+    })
+    res.status(201).json({ message: 'Alunos cadastrados com sucesso' });
+}
+
 module.exports = {
     register_professor,
     login_professor,
@@ -207,5 +275,6 @@ module.exports = {
     create_turma,
     get_turmas,
     create_atividade,
-    get_all_students
+    get_all_students,
+    create_many_alunos
 }

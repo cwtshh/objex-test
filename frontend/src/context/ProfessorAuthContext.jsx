@@ -47,7 +47,8 @@ export const ProfessorAuthProvider = ({ children }) => {
             const professor = {
                 id: res.data.id,
                 nome: res.data.nome,
-                email: res.data.email
+                email: res.data.email,
+                turma: res.data.turma
             }
             localStorage.setItem("objexAuth@professor", JSON.stringify(professor));
             localStorage.setItem("objexAuth@token", res.data.token);
