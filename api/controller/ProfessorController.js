@@ -158,7 +158,43 @@ const get_turmas = async(req, res) => {
         return res.status(500).json({ message: 'Erro ao buscar turmas' });
     }
     res.status(200).json(turmas);
-}
+};
+
+const create_atividade = async(req, res) => {
+    const { nome, dataEntrega, enunciado, professor_id, turma_id } = req.body;
+    if(!nome || !dataEntrega || !enunciado || !professor_id || !turma_id) {
+        return res.status(400).json({ message: 'Preencha todos os campos' });
+    }
+
+    if(!await Professor.findOne({ _id: professor_id })) {
+        return res.status(400).json({ message: 'Professor não encontrado' });
+    }
+    if(!await Turma.findOne({ _id: turma_id })) {
+        return res.status(400).json({ message: 'Turma não encontrada' });
+    }
+
+    const new_atividade = await Atividade.create({
+        nome,
+        dataEntrega,
+        enunciado,
+        professor: professor_id,
+        turma: turma_id
+    });
+
+    if(!new_atividade) {
+        return res.status(500).json({ message: 'Erro ao criar atividade' });
+    }
+
+    res.status(201).json({ message: 'Atividade criada com sucesso' });
+};
+
+const get_all_students = async(req, res) => {
+    const alunos = await Aluno.find().select('nome email turma matricula');
+    if(!alunos) {
+        return res.status(500).json({ message: 'Erro ao buscar alunos' });
+    }
+    res.status(200).json(alunos);
+};
 
 module.exports = {
     register_professor,
@@ -169,5 +205,7 @@ module.exports = {
     create_group,
     get_professores_name_id,
     create_turma,
-    get_turmas
+    get_turmas,
+    create_atividade,
+    get_all_students
 }

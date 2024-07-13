@@ -31,6 +31,8 @@ const DashboardProfessor = () => {
   const [ turmaAluno, setTurmaAluno ] = useState("");
   const [ matriculaAluno, setMatriculaAluno ] = useState("");
 
+  const [ alunos, setAlunos ] = useState([]);
+
 
   const handleGroupCreation = async(e) => {
     e.preventDefault();
@@ -89,6 +91,7 @@ const DashboardProfessor = () => {
       matricula: matriculaAluno
     }).then(res => {
       console.log(res.data);
+      get_alunos();
     }).catch(err => {
       console.log(err);
     })
@@ -116,7 +119,15 @@ const DashboardProfessor = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
+  };
+
+  const get_alunos = async() => {
+    axiosInstance.get('/professor/get-alunos').then(res => {
+      setAlunos(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  };
 
   const get_professores = async() => {
     axiosInstance.get('/professor/get-all').then(res => {
@@ -154,6 +165,7 @@ const DashboardProfessor = () => {
     get_professores()
     get_turmas();
     get_grupos();
+    get_alunos();
   }, [])
   return (
     <div>
@@ -210,6 +222,36 @@ const DashboardProfessor = () => {
         <h1 className='text-xl font-bold mt-6'>Alunos</h1>
         <div className='mt-6'>
           <button className='btn btn-primary mb-6' onClick={()=>document.getElementById('alunos').showModal()}>Adicionar Aluno</button>
+
+          <table className='table w-full'>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Email</th>
+                <th>Matricula</th>
+                <th>Turma</th>
+              </tr>
+            </thead>
+            <tbody>
+              {alunos.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className='text-center'>Não há alunos cadastrados</td>
+                </tr>
+              ) : (
+                alunos.map((aluno, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{aluno.nome}</td>
+                      <td>{aluno.email}</td>
+                      <td>{aluno.matricula}</td>
+                      <td>{aluno.turma}</td>
+                    </tr>
+                  )
+                })
+              )}
+            </tbody>
+
+          </table>
         </div>
 
         <Toast type={'success'} message={"Turma criada!"} show={showToast} onClose={handleCloseToast} />
