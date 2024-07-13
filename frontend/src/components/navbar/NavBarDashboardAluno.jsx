@@ -23,9 +23,9 @@ const NavBarDashboardAluno = () => {
                     tabIndex={0}
                     className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                     <li>
-                    <Link>Perfil</Link>
+                    <Link to='/aluno/perfil'>Perfil</Link>
                     </li>
-                    <li><a>Configurações</a></li>
+                    {/* <li><a>Configurações</a></li> */}
                     <li><button onClick={() => logout_aluno()}>Logout</button></li>
                 </ul>
                 </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Alert = ({ type, message}) => {
+const Alert = ({ type, message }) => {
   return (
     <div role="alert" className={`alert alert-${type}`}>
         <svg

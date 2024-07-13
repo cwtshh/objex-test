@@ -33,13 +33,13 @@ const verify_token = async(req, res) => {
 
 const authenticate_token = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    console.log(authHeader)
+    // console.log(authHeader)
     const token = authHeader && authHeader.split(' ')[1];
     if(!token) return res.status(401).json({ message: 'Token não fornecido' });
     jwt.verify(token, secret, (err, user) => {
         if(err) return res.status(403).json({ message: 'Token inválido' });
         req.user = user;
-        console.log("AUTHENTICATED")
+        // console.log("AUTHENTICATED")
         next();
     })
 };
@@ -165,34 +165,6 @@ const get_turmas = async(req, res) => {
     res.status(200).json(turmas);
 };
 
-const create_atividade = async(req, res) => {
-    const { nome, dataEntrega, enunciado, professor_id, turma_id } = req.body;
-    if(!nome || !dataEntrega || !enunciado || !professor_id || !turma_id) {
-        return res.status(400).json({ message: 'Preencha todos os campos' });
-    }
-
-    if(!await Professor.findOne({ _id: professor_id })) {
-        return res.status(400).json({ message: 'Professor não encontrado' });
-    }
-    if(!await Turma.findOne({ _id: turma_id })) {
-        return res.status(400).json({ message: 'Turma não encontrada' });
-    }
-
-    const new_atividade = await Atividade.create({
-        nome,
-        dataEntrega,
-        enunciado,
-        professor: professor_id,
-        turma: turma_id
-    });
-
-    if(!new_atividade) {
-        return res.status(500).json({ message: 'Erro ao criar atividade' });
-    }
-
-    res.status(201).json({ message: 'Atividade criada com sucesso' });
-};
-
 const get_all_students = async(req, res) => {
     const alunos = await Aluno.find().select('nome email turma matricula');
     if(!alunos) {
@@ -218,10 +190,6 @@ const create_many_alunos = async(req, res) => {
     if(!alunos || !turma) {
         return res.status(400).json({ message: 'Preencha todos os campos' });
     }
-
-    const array_size = alunos.length;
-    let success_count = 0;
-
 
     alunos.forEach(async(aluno) => {
         const password = auto_generate_password();
@@ -262,7 +230,31 @@ const create_many_alunos = async(req, res) => {
         });
     })
     res.status(201).json({ message: 'Alunos cadastrados com sucesso' });
-}
+};
+
+const create_atividade = async(req, res) => {
+    const { nome, dataEntrega, enunciado, professor_id, turma } = req.body;
+    if(!nome || !dataEntrega || !enunciado || !professor_id || !turma) {
+        return res.status(400).json({ message: 'Preencha todos os campos' });
+    }
+    if(!await Professor.findOne({ _id: professor_id })) {
+        return res.status(400).json({ message: 'Professor não encontrado' });
+    }
+    if(!await Turma.findOne({ nome: turma })) {
+        return res.status(400).json({ message: 'Turma não encontrada' });
+    }
+    const new_atividade = await Atividade.create({
+        nome,
+        dataEntrega,
+        enunciado,
+        professor: professor_id,
+        turma
+    });
+    if(!new_atividade) {
+        return res.status(500).json({ message: 'Erro ao criar atividade' });
+    }
+    res.status(201).json({ message: 'Atividade criada com sucesso' });
+};
 
 module.exports = {
     register_professor,

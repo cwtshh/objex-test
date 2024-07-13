@@ -41,6 +41,7 @@ const login_aluno = async(req, res) => {
         id: aluno._id,
         nome: aluno.nome,
         matricula: aluno.matricula,
+        email: aluno.email,
         token: generate_token(aluno._id)
     });
 };

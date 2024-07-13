@@ -6,6 +6,7 @@ import ProtectedRouteProfessor from './components/protected-route/ProtectedRoute
 import DashboardProfessor from './pages/dashboard/DashboardProfessor'
 import ProtectedRouteAluno from './components/protected-route/ProtectedRouteAluno'
 import DashboardAluno from './pages/dashboard/DashboardAluno'
+import ProfileConfig from './pages/profile-config/ProfileConfig'
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path='/login/professor' element={<LoginProfessor />}/>
             <Route path='/professor/dashboard' element={<ProtectedRouteProfessor component={DashboardProfessor} />}/>
             <Route path='/aluno/dashboard' element={<ProtectedRouteAluno component={DashboardAluno} />}/>
+            <Route path='/aluno/perfil' element={<ProtectedRouteAluno component={ProfileConfig} />}/>
           </Routes>
         </BrowserRouter>
       </div>
