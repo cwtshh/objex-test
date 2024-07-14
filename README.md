@@ -1,7 +1,7 @@
 # ObjeX - Testes
 
 Repositório de estudos e testes para o trabalho de Requisitos de Software.
-OBS: O repositório tem alguns branches, a mais atual é a branch front-end, nela há demonstrações das funções básicas da aplicação, sendo elas:
+# OBS: O repositório tem alguns branches, a mais atual é a branch some-tests, nela há demonstrações das funções básicas da aplicação, sendo elas:
 
 - CRUD de Alunos
 - CRUD de Grupos
