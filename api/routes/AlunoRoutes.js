@@ -2,9 +2,9 @@ const express = require('express');
 const router = express();
 
 const {
-    register_aluno,
     login_aluno,
-    authenticate_token
+    authenticate_token,
+    update_senha
 } = require('../controller/AlunosController');
 
 router.get('/', (req, res) => {
@@ -12,5 +12,6 @@ router.get('/', (req, res) => {
 });
 
 router.post('/login', login_aluno);
+router.post('/update/password', authenticate_token, update_senha);
 
 module.exports = router;

@@ -12,7 +12,7 @@ const GroupCard = ({ group }) => {
             />
             <p>Turma: {group.turma}</p>
             <div className="card-actions">
-            <button className="btn btn-primary">Buy Now</button>
+            <button className="btn btn-primary">Editar Grupo</button>
             </div>
         </div>
     </div>

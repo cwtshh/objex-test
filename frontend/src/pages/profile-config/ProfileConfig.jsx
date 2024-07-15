@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import NavBarDashboardAluno from '../../components/navbar/NavBarDashboardAluno'
 import { useAlunoAuth } from '../../context/AlunoAuthContext'
 import Alert from '../../components/alert/Alert';
+import axiosInstance from '../../axios/AxiosInstance'
 
 const ProfileConfig = () => {
   const { aluno } = useAlunoAuth();
@@ -17,8 +18,19 @@ const ProfileConfig = () => {
 
   const handleSenhaChange = async(e) => {
     e.preventDefault();
-    console.log(senha, confirmarSenha);
-  }
+    if(senha !== confirmarSenha) {
+      setError(true);
+      return;
+    }
+    await axiosInstance.post('/aluno/update/password', {
+      id: aluno.id,
+      senha: senha
+    }).then(res => {
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  };
 
   useEffect(() => {
     if(senha !== confirmarSenha) {

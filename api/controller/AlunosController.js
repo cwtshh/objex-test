@@ -12,13 +12,13 @@ const generate_token = (id) => {
 
 const authenticate_token = (req, res, next) => {
     const authHeader = req.headers['authorization'];
-    console.log(authHeader)
+    // console.log(authHeader)
     const token = authHeader && authHeader.split(' ')[1];
     if(!token) return res.status(401).json({ message: 'Token não fornecido' });
     jwt.verify(token, secret, (err, user) => {
         if(err) return res.status(403).json({ message: 'Token inválido' });
         req.user = user;
-        console.log("AUTHENTICATED")
+        // console.log("AUTHENTICATED")
         next();
     })
 };
@@ -46,8 +46,23 @@ const login_aluno = async(req, res) => {
     });
 };
 
+const update_senha = async(req, res) => {
+    const { id, senha } = req.body;
+    // console.log(senha);
+    if(!senha) {
+        return res.status(400).json({ message: 'Preencha todos os campos' });
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(senha, salt);
+    const aluno = await Aluno.findById(id);
+    aluno.senha = hash;
+    await aluno.save();
+    res.status(200).json({ message: 'Senha atualizada com sucesso' });
+}
+
 
 module.exports = {
     login_aluno,
-    authenticate_token
+    authenticate_token,
+    update_senha
 }

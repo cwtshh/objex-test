@@ -9,6 +9,7 @@ import axios from 'axios';
 import GroupCard from '../../components/groupcard/GroupCard';
 import ExcelJS from 'exceljs';
 import FileUpload from '../../components/file-upload/FileUpload';
+import { Link } from 'react-router-dom';
 
 const DashboardProfessor = () => {
   const { professor } = useProfessorAuth();
@@ -194,6 +195,7 @@ const DashboardProfessor = () => {
             </div>
             <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
               <li><button onClick={()=>document.getElementById('turmas').showModal()}>Gerenciar Turmas</button></li>
+              <li><Link to='/professor/atividades'>Painel de Atividades</Link></li>
             </ul>
           </div>
           <div className='ml-6'>

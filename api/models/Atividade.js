@@ -10,10 +10,8 @@ const AtividadeSchema = new Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Professor'
         },
-        turma: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Turma'
-        },
+        turma: String,
+        type: String
     },
     {
         timestamps: true

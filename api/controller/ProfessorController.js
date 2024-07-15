@@ -7,6 +7,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secret = process.env.jwt_secret_teacher;
 const nodemailer = require('nodemailer');
+const Atividade = require('../models/Atividade');
 const email = process.env.nodemailer_email;
 const pass = process.env.nodemailer_pass;
 
@@ -233,8 +234,8 @@ const create_many_alunos = async(req, res) => {
 };
 
 const create_atividade = async(req, res) => {
-    const { nome, dataEntrega, enunciado, professor_id, turma } = req.body;
-    if(!nome || !dataEntrega || !enunciado || !professor_id || !turma) {
+    const { nome, dataEntrega, enunciado, professor_id, turma, type } = req.body;
+    if(!nome || !dataEntrega || !enunciado || !professor_id || !turma || !type) {
         return res.status(400).json({ message: 'Preencha todos os campos' });
     }
     if(!await Professor.findOne({ _id: professor_id })) {
@@ -248,7 +249,8 @@ const create_atividade = async(req, res) => {
         dataEntrega,
         enunciado,
         professor: professor_id,
-        turma
+        turma,
+        type
     });
     if(!new_atividade) {
         return res.status(500).json({ message: 'Erro ao criar atividade' });

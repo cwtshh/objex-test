@@ -5,10 +5,13 @@ import axiosInstance from '../../axios/AxiosInstance';
 import { useEffect, useState } from 'react';
 import Alert from '../../components/alert/Alert';
 import GroupCard from '../../components/groupcard/GroupCard';
+import AtividadeCard from '../../components/atividade-card/AtividadeCard';
+import AtividadeCardAluno from '../../components/atividade-card/AtividadeCardAluno';
 
 const DashboardAluno = () => {
   const { aluno } = useAlunoAuth();
   const [ groups, setGroups ] = useState([]);
+  const [ atividades, setAtividades ] = useState([]);
 
 
   const get_grupos = async() => {
@@ -19,8 +22,17 @@ const DashboardAluno = () => {
     })
   };
 
+  const get_atividades = async() => {
+    await axiosInstance.get('/atividades/').then(res => {
+      setAtividades(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
   useEffect(() => {
     get_grupos();
+    get_atividades();
   }, [])
   return (
     <div>
@@ -145,11 +157,16 @@ const DashboardAluno = () => {
 
         
 
-        <div tabIndex={0} className="collapse collapse-arrow border-base-300 bg-base-200 border">
-          <div className="collapse-title text-xl font-medium">Focus me to see content</div>
-          <div className="collapse-content">
-            <p>tabindex={0} attribute is necessary to make the div focusable</p>
-          </div>
+        <div className='mt-6'>
+          {atividades.length === 0 ? (
+            <Alert type={'error'} message={"Não há atividades cadastradas"} />
+          ) : (
+            atividades.map((atividade, index) => {
+              return (
+                <AtividadeCardAluno key={index} props={atividade} />
+              )
+            })
+          )}
         </div>
 
 

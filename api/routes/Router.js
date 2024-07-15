@@ -8,5 +8,6 @@ router.get('/', (req, res) => {
 router.use('/professor', require('./ProfessorRoutes'));
 router.use('/grupo', require('./GrupoRoutes'));
 router.use('/aluno', require('./AlunoRoutes'));
+router.use('/atividades', require('./AtividadeRoutes'));
 
 module.exports = router;
