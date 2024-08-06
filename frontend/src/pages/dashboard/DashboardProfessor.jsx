@@ -10,9 +10,11 @@ import GroupCard from '../../components/groupcard/GroupCard';
 import ExcelJS from 'exceljs';
 import FileUpload from '../../components/file-upload/FileUpload';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
+import axiosDefInstance from '../../axios/AxiosDefInstance';
 
 const DashboardProfessor = () => {
-  const { professor } = useProfessorAuth();
+  const { user } = useAuth();
   const [ groups, setGroups ] = useState([]);
 
   const [ groupName, setGroupName ] = useState("");
@@ -42,7 +44,7 @@ const DashboardProfessor = () => {
       alert("Preencha todos os campos!");
       return;
     }
-    await axiosInstance.post('/professor/create/grupo', {
+    await axiosDefInstance.post('/professor/create/grupo', {
       nome: groupName,
       descricao: groupDesc,
       turma: groupTurma
@@ -64,7 +66,7 @@ const DashboardProfessor = () => {
       return;
     }
     console.log(turmaNome, professor_id);
-    await axiosInstance.post('/professor/create/turma', {
+    await axiosDefInstance.post('/professor/create/turma', {
       nome: turmaNome,
       professor_id: professor_id
     }).then(res => {
@@ -85,7 +87,7 @@ const DashboardProfessor = () => {
       return;
     }
     // console.log(nomeAluno, emailAluno, senhaAluno, turmaAluno, matriculaAluno);
-    await axiosInstance.post('/professor/register/aluno', {
+    await axiosDefInstance.post('/professor/register/aluno', {
       nome: nomeAluno,
       email: emailAluno,
       senha: senhaAluno,
@@ -124,7 +126,7 @@ const DashboardProfessor = () => {
   };
 
   const get_alunos = async() => {
-    axiosInstance.get('/professor/get-alunos').then(res => {
+    axiosDefInstance.get('/professor/get-alunos').then(res => {
       setAlunos(res.data);
     }).catch(err => {
       console.log(err);
@@ -132,7 +134,7 @@ const DashboardProfessor = () => {
   };
 
   const get_professores = async() => {
-    axiosInstance.get('/professor/get-all').then(res => {
+    axiosDefInstance.get('/professor/get-all').then(res => {
       setProfessores(res.data);
     }).catch(err => {
       console.log(err);
@@ -140,7 +142,7 @@ const DashboardProfessor = () => {
   };
 
   const get_turmas = async() => {
-    await axiosInstance.get('/professor/get-turmas').then(res => {
+    await axiosDefInstance.get('/professor/get-turmas').then(res => {
       setTurmas(res.data);
     }).catch(err => {
       console.log(err);
@@ -148,7 +150,7 @@ const DashboardProfessor = () => {
   };
 
   const get_grupos = async() => {
-    await axiosInstance.get('/grupo/get-all').then(res => {
+    await axiosDefInstance.get('/grupo/get-all').then(res => {
       setGroups(res.data);
     }).catch(err => {
       console.log(err);
@@ -200,7 +202,7 @@ const DashboardProfessor = () => {
           </div>
           <div className='ml-6'>
             <h1 className='text-2xl font-bold'>Dashboard Professor</h1>
-            <h2 className='text-xl'>Bem vindo, {professor.nome}!</h2>
+            <h2 className='text-xl'>Bem vindo, {user.nome}!</h2>
           </div>
         </div>
         <h1 className='mt-6 text-xl font-bold'>Grupos</h1>

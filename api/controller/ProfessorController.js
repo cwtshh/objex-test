@@ -47,6 +47,7 @@ const authenticate_token = (req, res, next) => {
 
 const register_professor = async(req, res) => {
     const { nome, email, senha, turma } = req.body;
+    console.log(req.body);
     if(!nome || !email || !senha || !turma) {
         return res.status(400).json({ message: 'Preencha todos os campos' });
     }
@@ -87,7 +88,8 @@ const login_professor = async(req, res) => {
             nome: professor.nome,
             email: professor.email,
             turma: professor.turma,
-            token: generate_token(professor._id)
+            token: generate_token(professor._id),
+            role: 'professor'
         }
     )
 };

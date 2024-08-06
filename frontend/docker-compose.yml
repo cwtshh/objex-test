@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: test-front
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+     - network
+networks:
+ network:

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import NavBarProfessor from '../../components/navbar/NavBarProfessor'
 import { useProfessorAuth } from '../../context/ProfessorAuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const LoginProfessor = () => {
   const [ email, setEmail ] = useState("");
@@ -9,6 +10,7 @@ const LoginProfessor = () => {
   const [ error, setError ] = useState(null);
   const { login_professor, professor } = useProfessorAuth();
   const navigate = useNavigate();
+  const { login, user } = useAuth();
 
   const handleSubmit = async(e) => {
     e.preventDefault();
@@ -17,15 +19,17 @@ const LoginProfessor = () => {
       alert("Preencha todos os campos");
       return;
     }
-    await login_professor(email, senha);
+    // await login_professor(email, senha);
+    // navigate("/professor/dashboard");
+    await login({ email, senha }, 'professor');
     navigate("/professor/dashboard");
   };
 
   useEffect(() => {
-    if(professor) {
+    if(user && user.role === 'professor') {
       navigate("/professor/dashboard");
     }
-  })
+  }, [])
 
   return (
     <div>

@@ -2,9 +2,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { useProfessorAuth } from '../../context/ProfessorAuthContext'
 import { useAlunoAuth } from '../../context/AlunoAuthContext';
+import { useAuth } from '../../context/AuthContext';
 
 const NavBarDashboardAluno = () => {
-    const { logout_aluno } = useAlunoAuth();
+    const { logout } = useAuth();
     return (
         <div className="navbar bg-base-100">
             <div className="flex-1">
@@ -26,7 +27,7 @@ const NavBarDashboardAluno = () => {
                     <Link to='/aluno/perfil'>Perfil</Link>
                     </li>
                     {/* <li><a>Configurações</a></li> */}
-                    <li><button onClick={() => logout_aluno()}>Logout</button></li>
+                    <li><button onClick={() => logout()}>Logout</button></li>
                 </ul>
                 </div>
             </div>

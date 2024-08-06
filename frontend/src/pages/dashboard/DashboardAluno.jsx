@@ -7,15 +7,17 @@ import Alert from '../../components/alert/Alert';
 import GroupCard from '../../components/groupcard/GroupCard';
 import AtividadeCard from '../../components/atividade-card/AtividadeCard';
 import AtividadeCardAluno from '../../components/atividade-card/AtividadeCardAluno';
+import { useAuth } from '../../context/AuthContext';
+import axiosDefInstance from '../../axios/AxiosDefInstance';
 
 const DashboardAluno = () => {
-  const { aluno } = useAlunoAuth();
+  const { user } = useAuth();
   const [ groups, setGroups ] = useState([]);
   const [ atividades, setAtividades ] = useState([]);
 
 
   const get_grupos = async() => {
-    await axiosInstance.get('/grupo/get-all').then(res => {
+    await axiosDefInstance.get('/grupo/get-all').then(res => {
       setGroups(res.data);
     }).catch(err => {
       console.log(err);
@@ -23,24 +25,24 @@ const DashboardAluno = () => {
   };
 
   const get_atividades = async() => {
-    await axiosInstance.get('/atividades/').then(res => {
+    await axiosDefInstance.get('/atividades/').then(res => {
       setAtividades(res.data);
     }).catch(err => {
       console.log(err);
     })
   }
 
-  useEffect(() => {
-    get_grupos();
-    get_atividades();
-  }, [])
+  // useEffect(() => {
+  //   get_grupos();
+  //   get_atividades();
+  // }, [])
   return (
     <div>
       <NavBarDashboardAluno />
 
       <div className='p-6'>
         <h1 className='text-2xl font-bold'>Dashboard - Aluno</h1>
-        <h3>Bem vindo, {aluno.nome}!</h3>
+        <h3>Bem vindo, {user.nome}!</h3>
 
         <h2 className='mt-6 text-xl font-bold'>Andamento da Disciplina</h2>
         

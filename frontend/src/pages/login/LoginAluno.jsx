@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import NavBar from '../../components/navbar/NavBar'
 import { useAlunoAuth } from '../../context/AlunoAuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const LoginAluno = () => {
   const [ matricula, setMatricula ] = useState('');
@@ -9,18 +10,23 @@ const LoginAluno = () => {
   const { login_aluno, aluno } = useAlunoAuth();
   const navigate = useNavigate();
 
+  const { login, user } = useAuth(); 
+
   const handleLogin = async(e) => {
     e.preventDefault();
     if(!matricula || !senha) {
       return alert('Preencha todos os campos');
-    }
+    };
+
+    await login({ matricula, senha }, 'estudante');
     // console.log(matricula, senha);
-    await login_aluno(matricula, senha);
-    navigate('/aluno/dashboard');
+    // await login_aluno(matricula, senha);
+    // navigate('/aluno/dashboard');
+
   };
 
   useEffect(() => {
-    if(aluno) {
+    if(user) {
       navigate('/aluno/dashboard');
     }
   });

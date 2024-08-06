@@ -1,9 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useProfessorAuth } from '../../context/ProfessorAuthContext'
+import { useAuth } from '../../context/AuthContext'
 
 const NavBarDashboardProfessor = () => {
-    const { logout } = useProfessorAuth();
+    const { logout } = useAuth();
     return (
         <div className="navbar bg-base-100">
             <div className="flex-1">
