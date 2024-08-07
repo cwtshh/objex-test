@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const Aluno = require('../models/Aluno');
 const bcrypt = require('bcryptjs');
 const secret = process.env.jwt_secret_student;
+const Grupo = require('../models/Group');
 const RespostaImagem = require('../models/RespostaImagem');
 const Atividade = require('../models/Atividade');
 const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
@@ -113,6 +114,59 @@ const responder_atividade_imagem = async(req, res) => {
     //     return res.status(500).json({ message: 'Erro ao salvar resposta' });
     // }
     // res.status(200).json({ message: 'Resposta salva com sucesso' });
+};
+
+const entrar_grupo = async(req, res) => {
+    const { id, grupo_id } = req.body;
+    const aluno = await Aluno.findById(id);
+    if(!aluno) {
+        return res.status(400).json({ message: 'Aluno não encontrado' });
+    }
+    const grupo = await Grupo.findById(grupo_id);
+    if(!grupo) {
+        return res.status(400).json({ message: 'Grupo não encontrado' });
+    }
+
+    if(grupo.membros.includes(id)) {
+        return res.status(400).json({ message: 'Aluno já está no grupo' });
+    }
+
+    grupo.membros.push(id);
+    await grupo.save();
+    res.status(200).json({ message: 'Aluno entrou no grupo com sucesso' });
+}
+
+const sair_grupo = async(req, res) => {
+    const { id, grupo_id } = req.body;
+    const aluno = await Aluno.findById(id);
+    if(!aluno) {
+        return res.status(400).json({ message: 'Aluno não encontrado' });
+    }
+    const grupo = await Grupo.findById(grupo_id);
+    if(!grupo) {
+        return res.status(400).json({ message: 'Grupo não encontrado' });
+    }
+    grupo.membros = grupo.membros.filter(membro => membro !== id);
+    await grupo.save();
+    res.status(200).json({ message: 'Aluno saiu do grupo com sucesso' });
+}
+
+const get_all_members_by_id = async(req, res) => {
+    const { ids } = req.body;
+    const alunos = await Aluno.find({ _id: { $in: ids } });
+    if(!alunos) {
+        return res.status(400).json({ message: 'Alunos não encontrados' });
+    }
+    res.status(200).json(alunos);
+}
+
+const get_by_id = async(req, res) => {
+    const { id } = req.params;
+    const aluno = await Aluno.findById(id).select('nome');
+    if(!aluno) {
+        return res.status(400).json({ message: 'Aluno não encontrado' });
+    }
+    res.status(200).json(aluno);
 }
 
 
@@ -120,5 +174,9 @@ module.exports = {
     login_aluno,
     authenticate_token,
     update_senha,
-    responder_atividade_imagem
+    responder_atividade_imagem,
+    entrar_grupo,
+    get_all_members_by_id,
+    get_by_id,
+    sair_grupo
 }
