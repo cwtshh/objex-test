@@ -32,10 +32,10 @@ const DashboardAluno = () => {
     })
   }
 
-  // useEffect(() => {
-  //   get_grupos();
-  //   get_atividades();
-  // }, [])
+  useEffect(() => {
+    get_grupos();
+    get_atividades();
+  }, [])
   return (
     <div>
       <NavBarDashboardAluno />

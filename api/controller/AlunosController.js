@@ -2,7 +2,23 @@ const jwt = require('jsonwebtoken');
 const Aluno = require('../models/Aluno');
 const bcrypt = require('bcryptjs');
 const secret = process.env.jwt_secret_student;
+const RespostaImagem = require('../models/RespostaImagem');
+const Atividade = require('../models/Atividade');
+const { getStorage, ref, getDownloadURL, uploadBytesResumable } = require('firebase/storage');
+const { initializeApp } = require('firebase/app');
 
+
+const firebaseConfig = {
+    apiKey: process.env.FB_API_KEY,
+    authDomain: process.env.FB_AUTH_DOMAIN,
+    projectId: process.env.FB_PROJECT_ID,
+    storageBucket: process.env.FB_STORAGE_BUCKET,
+    messagingSenderId: process.env.FB_MESSAGING_SENDER_ID,
+    appId: process.env.FB_APP_ID
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage();
 
 const generate_token = (id) => {
     return jwt.sign({ id }, secret, {
@@ -61,9 +77,48 @@ const update_senha = async(req, res) => {
     res.status(200).json({ message: 'Senha atualizada com sucesso' });
 }
 
+const responder_atividade_imagem = async(req, res) => {
+    const file = req.file;
+    const { atividade, aluno } = req.body;
+
+    res.send({atividade, aluno});
+    console.log(file);
+    console.log(atividade);
+    console.log(aluno);
+
+    // res.send(req.file);
+    // if(!file || !atividade_id || !aluno_id) {
+    //     return res.status(400).json({ message: 'Preencha todos os campos' });
+    // }
+    // const aluno = await Aluno.findById(aluno_id);
+    // const atividade = await Atividade.findById(atividade_id);
+
+    // // so para garantir
+    // if(!aluno || !atividade) {
+    //     return res.status(400).json({ message: 'Aluno ou atividade não encontrados' });
+    // }
+
+    // const storageRef = ref(storage, `respostas/${atividade_id}/${aluno_id}-${aluno.matricula}-${file.originalname}`);
+    // const metadata = {
+    //     contentType: file.mimetype
+    // };
+    // await uploadBytesResumable(storageRef, file.buffer, metadata);
+    // const downloadURL = await getDownloadURL(storageRef);
+    // const resposta = RespostaImagem.create({
+    //     aluno: aluno_id,
+    //     atividade: atividade_id,
+    //     imageURL: downloadURL
+    // });
+    // if(!resposta) {
+    //     return res.status(500).json({ message: 'Erro ao salvar resposta' });
+    // }
+    // res.status(200).json({ message: 'Resposta salva com sucesso' });
+}
+
 
 module.exports = {
     login_aluno,
     authenticate_token,
-    update_senha
+    update_senha,
+    responder_atividade_imagem
 }

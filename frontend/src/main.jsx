@@ -8,12 +8,8 @@ import { AuthProvider } from './context/AuthContext.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ProfessorAuthProvider>
-      <AlunoAuthProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </AlunoAuthProvider>
-    </ProfessorAuthProvider>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
   </React.StrictMode>,
 )

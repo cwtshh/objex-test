@@ -2,9 +2,11 @@ import React, { useState } from 'react'
 import NavBarDashboardProfessor from '../../components/navbar/NavBarDashboardProfessor'
 import { useProfessorAuth } from '../../context/ProfessorAuthContext';
 import axiosIntance from '../../axios/AxiosInstance'
+import { useAuth } from '../../context/AuthContext';
+import axiosDefInstance from '../../axios/AxiosDefInstance';
 
 const AdicionarAtiviade = () => {
-    const { professor } = useProfessorAuth();
+    const { user } = useAuth();
     const [ tituloAtividade, setTituloAtividade ] = useState('');
     const [ dataEntrega, setDataEntrega ] = useState('');
     const [ enunciado, setEnunciado ] = useState('');
@@ -18,12 +20,12 @@ const AdicionarAtiviade = () => {
             nome: tituloAtividade,
             dataEntrega,
             enunciado,
-            professor_id: professor.id,
-            turma: professor.turma,
+            professor_id: user.id,
+            turma: user.turma,
             type: type
         };
         console.log(atividade);
-        await axiosIntance.post('/professor/create/atividade', atividade).then(res => {
+        await axiosDefInstance.post('/professor/create/atividade', atividade).then(res => {
             console.log(res.data);
         }).catch(err => {
             console.log(err);
@@ -36,7 +38,7 @@ const AdicionarAtiviade = () => {
             <div className='p-6 flex flex-col items-center justify-center'>
                 <h1 className='text-2xl font-bold'>Adicionar Atividade</h1>
                 
-                <form onSubmit={handleCriarAtividade}>
+                <form onSubmit={handleCriarAtividade} className=''>
                     <label className="form-control w-full max-w-xs">
                         <div className="label">
                             <span className="label-text">Título da Atividade:</span>
@@ -69,7 +71,7 @@ const AdicionarAtiviade = () => {
                             style={{resize: 'none'}}
                             onChange={e => setEnunciado(e.target.value)}
                             className="textarea textarea-bordered h-80 w-96" 
-                            placeholder="Bio"></textarea>
+                            ></textarea>
                     </label>
 
 

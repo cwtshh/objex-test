@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import NavBarProfessor from '../../components/navbar/NavBarProfessor'
-import { useProfessorAuth } from '../../context/ProfessorAuthContext';
+//import { useProfessorAuth } from '../../context/ProfessorAuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
@@ -8,7 +8,6 @@ const LoginProfessor = () => {
   const [ email, setEmail ] = useState("");
   const [ senha, setSenha ] = useState("");
   const [ error, setError ] = useState(null);
-  const { login_professor, professor } = useProfessorAuth();
   const navigate = useNavigate();
   const { login, user } = useAuth();
 

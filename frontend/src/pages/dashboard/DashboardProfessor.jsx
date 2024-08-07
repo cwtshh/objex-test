@@ -413,7 +413,7 @@ const DashboardProfessor = () => {
                   <span className="label-text">Senha:</span>
                 </div>
                 <input 
-                  type="text"
+                  type="password"
                   className="input input-bordered w-full max-w-xs" 
                   onChange={e => setSenhaAluno(e.target.value)}
                 />

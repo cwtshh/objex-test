@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import NavBarDashboardAluno from '../../components/navbar/NavBarDashboardAluno'
-import { useAlunoAuth } from '../../context/AlunoAuthContext'
 import Alert from '../../components/alert/Alert';
 import axiosInstance from '../../axios/AxiosInstance'
+import { useAuth } from '../../context/AuthContext';
 
 const ProfileConfig = () => {
-  const { aluno } = useAlunoAuth();
-  const [ email, setEmail ] = useState(aluno.email);
+  const { user } = useAuth();
+  const [ email, setEmail ] = useState(user.email);
   const [ senha, setSenha ] = useState('');
   const [ confirmarSenha, setConfirmarSenha ] = useState('');
   const [ error, setError ] = useState(false);
@@ -23,7 +23,7 @@ const ProfileConfig = () => {
       return;
     }
     await axiosInstance.post('/aluno/update/password', {
-      id: aluno.id,
+      id: user.id,
       senha: senha
     }).then(res => {
       console.log(res.data);
@@ -65,7 +65,7 @@ const ProfileConfig = () => {
                   <div className="label">
                     <span className="label-text">Matricula:</span>
                   </div>
-                  <input disabled type="text" value={aluno.matricula} className="input input-bordered w-full max-w-xs" />
+                  <input disabled type="text" value={user.matricula} className="input input-bordered w-full max-w-xs" />
                 </label>
                 
                 <form onSubmit={handleEmailChange}>
@@ -117,7 +117,6 @@ const ProfileConfig = () => {
 
                 
               </div>
-
             </div>
           </div>
         </div>

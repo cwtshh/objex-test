@@ -2,7 +2,7 @@ services:
   code-api:
     build: .
     ports:
-      - "4000:4000"
+      - "${API_PORT}:${API_PORT}"
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules

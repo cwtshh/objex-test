@@ -1,9 +1,12 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 const AtividadeCard = ({ props }) => {
 
     const date = new Date(props.dataEntrega);
     const data = date.getDate();
+    const navigate = useNavigate();
+    // console.log(props)
 
   return (
     <div className="card bg-base-100 w-96 shadow-xl">
@@ -20,7 +23,7 @@ const AtividadeCard = ({ props }) => {
                 style={{resize: 'none'}}
             ></textarea>
             <div className="card-actions">
-                <button className="btn btn-primary">Editar</button>
+                <button className="btn btn-primary" onClick={() => navigate(`/professor/atividade/editar/${props._id}`)}>Editar</button>
                 <button className="btn btn-outline">Excluir</button>
             </div>
 

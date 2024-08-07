@@ -9,6 +9,19 @@ export const AuthProvider = ({ children }) => {
     const [ token, setToken ] = useState(null);
     const [ isReady, setReady ] = useState(false);
 
+    // const validate_token = async(token, role) => {
+    //     if(role == 'professor') {
+    //         await axios.post(`${API_BASE_URL}/professor/verify`, token).then((res) => {
+    //             console.log('token validado com sucesso!');
+    //             return true;
+    //         }).catch((err) => {
+    //             console.log('token inválido!');
+    //             return false;
+    //         })
+    //     }
+
+    // }
+
     useEffect(() => {
         // const retriver_user = async() => {
         //     const user = localStorage.getItem('objex@user');
@@ -23,7 +36,9 @@ export const AuthProvider = ({ children }) => {
         // retriver_user();
         const user = localStorage.getItem('objex@user');
         const token = localStorage.getItem('objex@token');
+
         if(user && token) {
+            login(JSON.parse(user), JSON.parse(user).role);
             setUser(JSON.parse(user));
             setToken(token);
         }
@@ -42,10 +57,10 @@ export const AuthProvider = ({ children }) => {
                 console.log(err);
             });
         }
-
         if(role == 'professor') {
             console.log('professor');
             console.log(API_BASE_URL)
+            console.log(userData);
             await axios.post(`${API_BASE_URL}/professor/login`, {
                 email: userData.email,
                 senha: userData.senha

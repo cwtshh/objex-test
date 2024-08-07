@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import NavBar from '../../components/navbar/NavBar'
-import { useAlunoAuth } from '../../context/AlunoAuthContext';
+//import { useAlunoAuth } from '../../context/AlunoAuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const LoginAluno = () => {
   const [ matricula, setMatricula ] = useState('');
   const [ senha, setSenha ] = useState('');
-  const { login_aluno, aluno } = useAlunoAuth();
   const navigate = useNavigate();
 
   const { login, user } = useAuth(); 

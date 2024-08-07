@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
 import ExcelJS from 'exceljs';
 import axiosInstance from '../../axios/AxiosInstance';
-import { useProfessorAuth } from '../../context/ProfessorAuthContext';
+import { useAuth } from '../../context/AuthContext';
+
 
 const FileUpload = () => {
     const [ file, setFile ] = useState(null);
-    const { professor } = useProfessorAuth();
+    const { user } = useAuth();
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);

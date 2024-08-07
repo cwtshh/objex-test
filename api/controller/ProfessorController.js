@@ -47,7 +47,6 @@ const authenticate_token = (req, res, next) => {
 
 const register_professor = async(req, res) => {
     const { nome, email, senha, turma } = req.body;
-    console.log(req.body);
     if(!nome || !email || !senha || !turma) {
         return res.status(400).json({ message: 'Preencha todos os campos' });
     }
@@ -259,6 +258,10 @@ const create_atividade = async(req, res) => {
     }
     res.status(201).json({ message: 'Atividade criada com sucesso' });
 };
+
+const upload_casos_teste = async(req, res) => {
+    const{ atividade_id, casos_teste } = req.body;
+}
 
 module.exports = {
     register_professor,
