@@ -76,11 +76,20 @@ const GrouCardAluo = ({group, triggerReload}) => {
                         tabIndex={0}
                         className="dropdown-content card card-compact bg-primary text-primary-content z-[1] w-64 p-2 shadow">
                         <div className="card-body">
-                            {membrosGrupo.map((membro, index) => {
+                            {group.membros.length > 0 ? (
+                                group.membros.map((membro, index) => {
+                                    return (
+                                        <p key={index}>{membro}</p>
+                                    )
+                                })
+                            ) : (
+                                <><p>Não há membros nesse grupo.</p></>
+                            )}
+                            {/* {membrosGrupo.map((membro, index) => {
                                 return (
                                     <p key={index}>{membro}</p>
                                 )
-                            })}
+                            })} */}
                         </div>
                     </div>
                 </div>

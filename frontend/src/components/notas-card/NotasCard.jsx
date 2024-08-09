@@ -6,7 +6,13 @@ const NotasCard = ({ atividade }) => {
         <input type="checkbox" />
         <div className="collapse-title text-xl font-medium">{atividade.nome}</div>
         <div className="collapse-content">
+            <p>{atividade.timestamps}</p>
             <p>{atividade.enunciado}</p>
+            {atividade.nota ? (
+              <p></p>
+            ) : (
+                <div className='badge badge-error mt-6 p-4'>Ainda não há notas registradas</div>
+            )}
         </div>
     </div>
   )

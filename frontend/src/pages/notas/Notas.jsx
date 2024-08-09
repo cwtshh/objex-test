@@ -24,10 +24,9 @@ const Notas = () => {
     <div>
         <NavBarDashboardAluno />
         <div className='p-6'>
-          <h1 className='text-2xl font-bold'>Notas</h1>
-
+          <h1 className='text-2xl font-bold'>Notas - (Feedback)</h1>
           <h3 className='mt-6 text-xl'>Atividades</h3>
-          <div className='grid grid-cols-1 gap-4'>
+          <div className='grid grid-cols-1 gap-4 mt-6'>
             {atividades.map((atividade, index) => {
               return (
                 <NotasCard key={index} atividade={atividade} />
