@@ -23,27 +23,28 @@ export const AuthProvider = ({ children }) => {
     // }
 
     useEffect(() => {
-        // const retriver_user = async() => {
-        //     const user = localStorage.getItem('objex@user');
-        //     const token = localStorage.getItem('objex@token');
+        const retriver_user = async() => {
+            const user = localStorage.getItem('objex@user');
+            const token = localStorage.getItem('objex@token');
 
-        //     if(user && token) {
-        //         setUser(JSON.parse(user));
-        //         setToken(token);
-        //     }
-        // };
+            if(user && token) {
+                setUser(JSON.parse(user));
+                setToken(token);
+                setReady(true)
+            }
+        };
+        retriver_user()
 
-        // retriver_user();
-        const user = localStorage.getItem('objex@user');
-        const token = localStorage.getItem('objex@token');
-
-        if(user && token) {
-            login(JSON.parse(user), JSON.parse(user).role);
-            setUser(JSON.parse(user));
-            setToken(token);
-        }
-        setReady(true);
     }, []);
+
+    const validate_token = async(token, role) => {
+        await axios.post(`${API_BASE_URL}/${role}/validate-token/${token}`).then(res => {
+            return true;
+        })
+        .catch(err => {
+            return false;
+        });
+    }
 
     const login = async(userData, role) => {
         if(role == 'estudante') {

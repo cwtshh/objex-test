@@ -9,12 +9,15 @@ const {
     entrar_grupo,
     get_all_members_by_id,
     get_by_id,
-    sair_grupo
+    sair_grupo,
+    validate_token
 } = require('../controller/AlunosController');
 
 router.get('/', (req, res) => {
     res.send('Aluno');
 });
+
+router.post('/validate-token/:token', validate_token);
 
 router.get('/get-all-members', authenticate_token, get_all_members_by_id);
 router.get('/:id', authenticate_token, get_by_id);

@@ -12,6 +12,7 @@ const GrouCardAluo = ({group, triggerReload}) => {
             id: user.id,
             grupo_id: group._id
         }).then(res => {
+            user.already_in_group = true;
             console.log(res.data);
             setSuccess(true);
             triggerReload();

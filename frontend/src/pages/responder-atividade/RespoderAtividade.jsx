@@ -3,7 +3,7 @@ import NavBarDashboardAluno from '../../components/navbar/NavBarDashboardAluno'
 import { useParams } from 'react-router-dom'
 import axiosInstance from '../../axios/AxiosInstance';
 import axiosDefInstance from '../../axios/AxiosDefInstance';
-import { API_CODE_BASE_URL } from '../../util/constants';
+import { API_BASE_URL, API_CODE_BASE_URL } from '../../util/constants';
 import { useAuth } from '../../context/AuthContext';
 import Alert from '../../components/alert/Alert';
 
@@ -58,16 +58,9 @@ const RespoderAtividade = () => {
             form.append('file', file);
             form.append('atividade', atividade._id);
             form.append('aluno', user.id);
-            // await axiosDefInstance.post('aluno/responder/imagem', formData, {
-            //     headers: {
-            //         'Content-Type': 'multipart/form-data'
-            //     }
-            // })
-            await axiosDefInstance.postForm('aluno/responder/imagem', form).then(res => {
+            
+            await axiosDefInstance.postForm(`${API_BASE_URL}/aluno/responder/imagem`, form).then(res => {
                 console.log(res);
-                setSent(true);
-            }).catch(err => {
-                console.log(err);
             })
         }
     };

@@ -8,6 +8,10 @@ const AlunoSchema = new Schema(
         senha: String,
         turma: String,
         matricula: String,
+        already_in_group: {
+            type: Boolean,
+            default: false
+        },
     },
     {
         timestamps: true

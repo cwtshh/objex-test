@@ -12,6 +12,8 @@ import AdicionarAtiviade from './pages/adicionar-atividade/AdicionarAtiviade'
 import RespoderAtividade from './pages/responder-atividade/RespoderAtividade'
 import ProtectedRoute from './components/protected-route/ProtectedRoute'
 import EditarAtividade from './pages/atividades/EditarAtividade'
+import EditarGrupo from './pages/editar-grupo/EditarGrupo'
+import Notas from './pages/notas/Notas'
 
 
 function App() {
@@ -26,13 +28,18 @@ function App() {
             <Route path='/login/professor' element={<LoginProfessor />}/>
             {/* <Route path='/professor/dashboard' element={<ProtectedRouteProfessor component={DashboardProfessor} />}/> */}
             {/* <ProtectedRoute exact path='/professor/dashboard' component={<DashboardProfessor />} roles={['professor']} /> */}
-            <Route path='/professor/dashboard' element={<ProtectedRoute roles={['professor']} component={DashboardProfessor} />}/>
+            {/* aluno */}
+            <Route path='/aluno/perfil' element={<ProtectedRoute roles={['estudante']} component={ProfileConfig} />} />
             <Route path='/aluno/dashboard' element={<ProtectedRoute roles={['estudante']} component={DashboardAluno} />}/>
+            <Route path='/aluno/atividade/:id' element={<ProtectedRoute roles={['estudante']} component={RespoderAtividade} />} />
+            <Route path='/aluno/notas' element={<ProtectedRoute roles={['estudante']} component={Notas} />} />
+
+            {/* professor */}
+            <Route path='/professor/dashboard' element={<ProtectedRoute roles={['professor']} component={DashboardProfessor} />}/>
             <Route path='/professor/atividades' element={<ProtectedRoute roles={['professor']} component={AtividadesProfessor} />} />
             <Route path='/professor/atividades/adicionar' element={<ProtectedRoute roles={['professor']} component={AdicionarAtiviade} />} />
-            <Route path='/aluno/atividade/:id' element={<ProtectedRoute roles={['estudante']} component={RespoderAtividade} />} />
             <Route path='/professor/atividade/editar/:id' element={<ProtectedRoute roles={['professor']} component={EditarAtividade} />} />
-            <Route path='/aluno/perfil' element={<ProtectedRoute roles={['estudante']} component={ProfileConfig} />} />
+            <Route path='/professor/grupo/editar/:id' element={<ProtectedRoute roles={['professor']} component={EditarGrupo}/>} />
             {/* <Route path='/aluno/dashboard' element={<ProtectedRouteAluno component={DashboardAluno} />}/> */}
             {/* <Route path='/aluno/perfil' element={<ProtectedRouteAluno component={ProfileConfig} />}/>
             <Route path='/professor/atividades' element={<ProtectedRouteProfessor component={AtividadesProfessor} />}/>

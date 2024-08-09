@@ -27,6 +27,14 @@ const generate_token = (id) => {
     });
 };
 
+const validate_token = (req, res, next) => {
+    const { token } = req.params;
+    jwt.verify(token, secret, (err, user) => {
+        if(err) return res.status(403).json({ message: 'Token inválido' });
+        res.status(200).json({ message: 'Token válido' });
+    });
+}
+
 const authenticate_token = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     // console.log(authHeader)
@@ -60,7 +68,8 @@ const login_aluno = async(req, res) => {
         matricula: aluno.matricula,
         email: aluno.email,
         token: generate_token(aluno._id),
-        role: 'estudante'
+        role: 'estudante',
+        already_in_group: aluno.already_in_group,
     });
 };
 
@@ -79,13 +88,7 @@ const update_senha = async(req, res) => {
 }
 
 const responder_atividade_imagem = async(req, res) => {
-    const file = req.file;
-    const { atividade, aluno } = req.body;
-
-    res.send({atividade, aluno});
-    console.log(file);
-    console.log(atividade);
-    console.log(aluno);
+    console.log(req);
 
     // res.send(req.file);
     // if(!file || !atividade_id || !aluno_id) {
@@ -122,6 +125,9 @@ const entrar_grupo = async(req, res) => {
     if(!aluno) {
         return res.status(400).json({ message: 'Aluno não encontrado' });
     }
+    if(aluno.already_in_group) {
+        return res.status(400).json({ message: 'Aluno já está em um grupo' });
+    }
     const grupo = await Grupo.findById(grupo_id);
     if(!grupo) {
         return res.status(400).json({ message: 'Grupo não encontrado' });
@@ -131,8 +137,10 @@ const entrar_grupo = async(req, res) => {
         return res.status(400).json({ message: 'Aluno já está no grupo' });
     }
 
+    aluno.already_in_group = true;
     grupo.membros.push(id);
     await grupo.save();
+    await aluno.save();
     res.status(200).json({ message: 'Aluno entrou no grupo com sucesso' });
 }
 
@@ -146,8 +154,10 @@ const sair_grupo = async(req, res) => {
     if(!grupo) {
         return res.status(400).json({ message: 'Grupo não encontrado' });
     }
+    aluno.already_in_group = false;
     grupo.membros = grupo.membros.filter(membro => membro !== id);
     await grupo.save();
+    await aluno.save();
     res.status(200).json({ message: 'Aluno saiu do grupo com sucesso' });
 }
 
@@ -178,5 +188,6 @@ module.exports = {
     entrar_grupo,
     get_all_members_by_id,
     get_by_id,
-    sair_grupo
+    sair_grupo,
+    validate_token
 }

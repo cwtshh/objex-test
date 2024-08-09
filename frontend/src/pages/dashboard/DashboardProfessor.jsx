@@ -443,9 +443,6 @@ const DashboardProfessor = () => {
             <button>close</button>
           </form>
         </dialog>
-        
-
-
       </div>
     </div>
   )

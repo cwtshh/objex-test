@@ -9,7 +9,7 @@ axiosDefInstance.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('objex@token');
         const user = localStorage.getItem('objex@user');
-        console.log(token);
+        // console.log(token);
         if(user && token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
