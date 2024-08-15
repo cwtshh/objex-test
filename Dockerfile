@@ -1,36 +1,34 @@
-# Etapa 1: Build do Frontend
-FROM node:14 AS build-frontend
+FROM node
 
 WORKDIR /app/frontend
 
-# Copia os arquivos de dependência e instala as dependências
-COPY frontend/package*.json ./ 
+COPY frontend/package*.json ./
+
 RUN npm install
 
-# Copia o restante do código do frontend e executa o build
-COPY frontend/ ./
+COPY frontend .
+
 RUN npm run build
 
-# Etapa 2: Configuração do Backend
-FROM node:14 AS build-backend
+# Verifique se o build foi gerado corretamente
+RUN ls -la /app/frontend/build
+
+
+FROM node:alpine
 
 WORKDIR /app/api
 
-# Copia os arquivos de dependência e instala as dependências
-COPY api/package*.json ./ 
+COPY api/package*.json ./
+
+COPY api/ .
+
 RUN npm install
 
-# Copia o restante do código do backend
-COPY api/ ./
+COPY --from=build-frontend /app/frontend/build /app/api/public
 
-# Copia os arquivos do build do frontend para a pasta public do backend
-COPY --from=build-frontend /app/frontend/build ./public
+EXPOSE 4000
 
-# Expõe a porta do backend
-EXPOSE 3000
-
-# Define as variáveis de ambiente (essas variáveis podem ser substituídas pelas do EasyPanel)
 ENV NODE_ENV production
 
-# Comando para iniciar o backend
 CMD ["npm", "start"]
+
